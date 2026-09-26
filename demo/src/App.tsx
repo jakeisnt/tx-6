@@ -22,7 +22,7 @@ function format(event: TX6Event) {
 
 function Setup() {
 	return (
-		<details className={classes.setup} open>
+		<details className={classes.setup}>
 			<summary>put the TX-6 in midi mode</summary>
 			<ol>
 				<li>open the <b>system menu</b> and go to <b>midi</b>.</li>
@@ -114,10 +114,10 @@ export default function App() {
 			<PairingProvider>
 				<main className={classes.page}>
 					<Toolbar />
-					<div className={classes.workspace}>
+					<div className={classes.stage}>
 						<Device />
-						<MidiLog />
 					</div>
+					<MidiLog />
 				</main>
 			</PairingProvider>
 		</TX6Provider>

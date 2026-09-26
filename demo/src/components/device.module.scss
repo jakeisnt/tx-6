@@ -8,6 +8,20 @@
 	user-select: none;
 	-webkit-user-select: none;
 	-webkit-tap-highlight-color: transparent;
+
+	// Soft contact shadow where the device rests on the desk
+	&::before {
+		content: "";
+		position: absolute;
+		left: u(66 + 40);
+		right: u(-10);
+		top: u(1600);
+		height: u(260);
+		border-radius: 50%;
+		background: radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.1) 45%, transparent 70%);
+		filter: blur(u(28));
+		pointer-events: none;
+	}
 }
 
 // Anodised aluminium body: light falls from the top, so the panel darkens toward
@@ -23,6 +37,7 @@
 
 	background:
 		radial-gradient(ellipse 90% 45% at 30% 0%, rgba(255, 255, 255, 0.3), transparent 70%),
+		linear-gradient(115deg, rgba(255, 255, 255, 0.14) 0%, transparent 35%, transparent 65%, rgba(0, 0, 0, 0.04) 100%),
 		linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 30% 70%, rgba(0, 0, 0, 0.06)),
 		linear-gradient(180deg, $panel-top 0%, #d2d2d4 22%, #c0c0c2 48%, #b0afb2 74%, $panel-bottom 100%);
 
@@ -32,8 +47,13 @@
 		inset u(-3) 0 u(4) rgba(0, 0, 0, 0.1),
 		inset 0 u(-5) u(3) rgba(0, 0, 0, 0.22),
 		inset 0 u(-14) u(10) u(-6) rgba(0, 0, 0, 0.12),
-		0 u(2) u(2) rgba(0, 0, 0, 0.25),
-		0 u(40) u(70) u(-20) rgba(0, 0, 0, 0.35);
+		0 0 0 u(1) rgba(0, 0, 0, 0.1),
+		// Layered drop shadow: a tight contact edge fading into a wide, soft penumbra
+		0 u(1) u(1) rgba(0, 0, 0, 0.2),
+		0 u(3) u(4) rgba(0, 0, 0, 0.12),
+		u(4) u(12) u(18) rgba(0, 0, 0, 0.1),
+		u(10) u(30) u(48) rgba(0, 0, 0, 0.12),
+		u(20) u(64) u(110) rgba(0, 0, 0, 0.14);
 
 	// Fine bead-blasted grain over the whole panel
 	&::before {

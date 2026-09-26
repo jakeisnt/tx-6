@@ -18,10 +18,10 @@ describe('TX6', () => {
 		tx6.on('input1.slider', onSlider)
 		tx6.on('event', onAny)
 
-		transport.send(0xb0, 1, 0)
-		expect(onSlider).toHaveBeenCalledWith({ progress: 1, value: 0 })
-		expect(onAny).toHaveBeenCalledWith({ event: 'input1.slider', progress: 1, value: 0 })
-		expect(tx6.getValue('input1.slider')).toEqual({ progress: 1, value: 0 })
+		transport.send(0xb0, 1, 127)
+		expect(onSlider).toHaveBeenCalledWith({ progress: 1, value: 127 })
+		expect(onAny).toHaveBeenCalledWith({ event: 'input1.slider', progress: 1, value: 127 })
+		expect(tx6.getValue('input1.slider')).toEqual({ progress: 1, value: 127 })
 
 		await tx6.disconnect()
 		expect(transport.disconnects).toBe(1)
