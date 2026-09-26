@@ -153,4 +153,47 @@ describe('TX6', () => {
 		tx6.receive([0xb0, 7, 65])
 		expect(listener).toHaveBeenCalledTimes(calls)
 	})
+
+	test('reports what each message decoded to, and where it came from', async () => {
+		const transport = fakeTransport()
+		const tx6 = new TX6({ transport })
+		const onMessage = mock()
+		tx6.on('message', onMessage)
+		await tx6.connect()
+
+		transport.send(0xb0, 25, 127)
+		expect(onMessage).toHaveBeenLastCalledWith(
+			{ status: 0xb0, data: [25, 127] },
+			{ origin: 'device', source: 'cc:25', event: { event: 'input1.button', pressed: true, value: 127 } }
+		)
+
+		tx6.receive([0x90, 60, 1])
+		expect(onMessage).toHaveBeenLastCalledWith({ status: 0x90, data: [60, 1] }, { origin: 'local', source: 'note:60', event: undefined })
+
+		tx6.receive([0xf8])
+		expect(onMessage).toHaveBeenLastCalledWith({ status: 0xf8, data: [] }, { origin: 'local', source: undefined, event: undefined })
+	})
+
+	test('bindings', () => {
+		const tx6 = new TX6({ bindings: { 'cc:74': 'input2.eq1' } })
+		const onBindings = mock()
+		tx6.on('bindings', onBindings)
+
+		tx6.receive([0xb0, 74, 127])
+		expect(tx6.getValue('input2.eq1')).toEqual({ progress: 1, value: 127 })
+
+		tx6.bind('note:40', 'shift')
+		expect(onBindings).toHaveBeenLastCalledWith({ 'cc:74': 'input2.eq1', 'note:40': 'shift' })
+		tx6.receive([0x90, 40, 127])
+		expect(tx6.getValue('shift')).toMatchObject({ pressed: true })
+
+		tx6.bind('cc:1', null)
+		expect(tx6.resolve('cc:1')).toBeUndefined()
+		tx6.unbind('cc:1')
+		expect(tx6.resolve('cc:1')).toBe('input1.slider')
+
+		tx6.setBindings({})
+		expect(tx6.bindings).toEqual({})
+		expect(tx6.resolve('cc:74')).toBeUndefined()
+	})
 })

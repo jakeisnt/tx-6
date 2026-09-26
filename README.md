@@ -56,7 +56,21 @@ If you want to access multiple attributes at the same time, use `useTX6Attribute
 const [{ progress: eq1 }, { progress: eq2 }, { progress: eq3 }] = useTX6Attributes(['input1.eq1', 'input1.eq2', 'input1.eq3'])
 ```
 
+### Mapping and pairing
+Controls are decoded from Control Change, Note On and Note Off messages on any channel, using the TX-6's default numbering (1–6 faders, 7–24 EQ, 25–30 channel buttons, 31 encoder, 32–37 select/fx1/fx2/shift/aux/cue). If your unit sends something else, pair sources to controls yourself:
+
+```ts
+const tx6 = new TX6({ transport: webBluetooth(), bindings: { 'cc:74': 'input1.slider' } })
+tx6.bind('note:40', 'fx1')   // add or replace a pairing
+tx6.unbind('note:40')        // back to the default map
+
+// Every message, and what it decoded to; raw BLE-MIDI packets arrive on 'packet'
+tx6.on('message', (message, { origin, source, event }) => console.log(source, event))
+```
+
 ## Demo
+The demo shows a raw log of every BLE-MIDI packet and the messages parsed from it. **pair controls** lets you click a control on the drawing and then move it on the TX-6 to pair them. Pairings are saved in the browser.
+
 The `demo/` workspace is a browser remote for the TX-6, deployed as a static-assets [Cloudflare Worker](https://developers.cloudflare.com/workers/static-assets/) configured in `wrangler.jsonc`.
 
 ```

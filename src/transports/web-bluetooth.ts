@@ -90,7 +90,11 @@ export function webBluetooth(options: WebBluetoothTransportOptions = {}): TX6Tra
 					if(!value)
 						return
 
-					for(const message of parseBLEMidiPacket(value))
+					// Copy: some implementations reuse the underlying buffer between notifications
+					const bytes = new Uint8Array(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength))
+					sink.packet?.(bytes)
+
+					for(const message of parseBLEMidiPacket(bytes))
 						sink.message(message)
 				}
 

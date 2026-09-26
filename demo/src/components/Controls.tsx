@@ -1,16 +1,38 @@
 import { type CSSProperties, type KeyboardEvent, type PointerEvent, useEffect, useRef, useState } from 'react'
-import type { TX6ButtonEvent, TX6EqEvent, TX6SliderEvent } from 'use-tx-6'
+import type { TX6ButtonEvent, TX6EqEvent, TX6EventType, TX6SliderEvent } from 'use-tx-6'
 import { useTX6Attribute, useTX6Device } from 'use-tx-6/react'
 
 import { cn } from '../lib/cn.ts'
 import { startDrag } from '../lib/drag.ts'
 import { at, FADER } from '../lib/geometry.ts'
 import { sendControl, tapControl } from '../lib/midi.ts'
+import { usePairing } from '../lib/pairing.tsx'
 import classes from './controls.module.scss'
 
 const KNOB_SWEEP = 270
 
 type Point = { x: number, y: number }
+
+/**
+ * In pairing mode a press arms the control instead of moving it. Returns the
+ * class to show that state and a guard for pointerdown handlers.
+ */
+function usePairable(event: TX6EventType) {
+	const { learning, armed, arm } = usePairing()
+
+	return {
+		pairingClass: cn(learning && classes.pairable, armed === event && classes.armed),
+		/** True if the press was taken by pairing mode. */
+		pairOnPress: (start: PointerEvent) => {
+			if(!learning)
+				return false
+
+			start.preventDefault()
+			arm(armed === event ? null : event)
+			return true
+		}
+	}
+}
 
 /** EQ knob. Drag vertically, scroll, or use the arrow keys. */
 export function Knob({ event, tone, x, y }: Point & { event: TX6EqEvent, tone: 'dark' | 'orange' | 'cream' }) {
@@ -18,8 +40,12 @@ export function Knob({ event, tone, x, y }: Point & { event: TX6EqEvent, tone: '
 	// Knobs sit at 12 o'clock until the device reports otherwise
 	const value = useTX6Attribute(event).value ?? 64
 	const ref = useWheel(steps => sendControl(device, event, value + steps * 4))
+	const { pairingClass, pairOnPress } = usePairable(event)
 
 	const onPointerDown = (start: PointerEvent) => {
+		if(pairOnPress(start))
+			return
+
 		startDrag(start, (_, dy) => sendControl(device, event, value - dy * 0.8))
 	}
 
@@ -32,7 +58,7 @@ export function Knob({ event, tone, x, y }: Point & { event: TX6EqEvent, tone: '
 			aria-valuemin={0}
 			aria-valuemax={127}
 			aria-valuenow={value}
-			className={cn(classes.knob, tone !== 'dark' && classes[tone])}
+			className={cn(classes.knob, tone !== 'dark' && classes[tone], pairingClass)}
 			style={at(x, y)}
 			onPointerDown={onPointerDown}
 			onKeyDown={arrowKeys(step => sendControl(device, event, value + step * 4))}
@@ -58,7 +84,12 @@ export function Fader({ event, x, y }: Point & { event: TX6SliderEvent }) {
 		return (offset - FADER.travelTop) / (FADER.travelBottom - FADER.travelTop) * 127
 	}
 
+	const { pairingClass, pairOnPress } = usePairable(event)
+
 	const onPointerDown = (start: PointerEvent<HTMLDivElement>) => {
+		if(pairOnPress(start))
+			return
+
 		const element = start.currentTarget
 		sendControl(device, event, valueAt(element, start.clientY))
 		startDrag(start, (_, __, move) => sendControl(device, event, valueAt(element, move.clientY)))
@@ -76,7 +107,7 @@ export function Fader({ event, x, y }: Point & { event: TX6SliderEvent }) {
 			aria-valuemin={0}
 			aria-valuemax={127}
 			aria-valuenow={127 - value}
-			className={classes.fader}
+			className={cn(classes.fader, pairingClass)}
 			style={at(x, y)}
 			onPointerDown={onPointerDown}
 			onKeyDown={arrowKeys(step => sendControl(device, event, value - step * 4))}
@@ -93,15 +124,20 @@ type ButtonProps = Point & { event: TX6ButtonEvent }
 function useMomentary(event: TX6ButtonEvent) {
 	const device = useTX6Device()
 	const pressed = useTX6Attribute(event).pressed ?? false
+	const { pairingClass, pairOnPress } = usePairable(event)
 
 	return {
 		pressed,
+		pairingClass,
 		props: {
 			role: 'button',
 			tabIndex: 0,
 			'aria-label': event,
 			'aria-pressed': pressed,
 			onPointerDown: (start: PointerEvent) => {
+				if(pairOnPress(start))
+					return
+
 				sendControl(device, event, 127)
 				startDrag(start, () => {}, () => sendControl(device, event, 0))
 			},
@@ -120,16 +156,16 @@ function useMomentary(event: TX6ButtonEvent) {
 }
 
 export function ChannelButton({ event, x, y }: ButtonProps) {
-	const { pressed, props } = useMomentary(event)
-	return <div {...props} className={cn(classes.channelButton, pressed && classes.pressed)} style={at(x, y)} />
+	const { pressed, pairingClass, props } = useMomentary(event)
+	return <div {...props} className={cn(classes.channelButton, pressed && classes.pressed, pairingClass)} style={at(x, y)} />
 }
 
 export function FXButton({ event, x, y }: ButtonProps & { event: 'fx1' | 'fx2' }) {
-	const { pressed, props } = useMomentary(event)
+	const { pressed, pairingClass, props } = useMomentary(event)
 	const bars = event === 'fx1' ? 1 : 2
 
 	return (
-		<div {...props} className={cn(classes.fxButton, pressed && classes.pressed)} style={at(x, y)}>
+		<div {...props} className={cn(classes.fxButton, pressed && classes.pressed, pairingClass)} style={at(x, y)}>
 			<div className={cn(classes.pill, bars === 2 && classes.pillOrange)}>
 				<div className={classes.pillBar} />
 				{bars === 2 && <div className={classes.pillBar} />}
@@ -139,10 +175,10 @@ export function FXButton({ event, x, y }: ButtonProps & { event: 'fx1' | 'fx2' }
 }
 
 export function ShiftButton({ x, y }: Point) {
-	const { pressed, props } = useMomentary('shift')
+	const { pressed, pairingClass, props } = useMomentary('shift')
 
 	return (
-		<div {...props} className={cn(classes.shiftButton, pressed && classes.pressed)} style={at(x, y)}>
+		<div {...props} className={cn(classes.shiftButton, pressed && classes.pressed, pairingClass)} style={at(x, y)}>
 			<div className={classes.shiftDot} />
 		</div>
 	)
@@ -164,8 +200,13 @@ export function Encoder({ x, y }: Point) {
 	}
 
 	const ref = useWheel(turn)
+	// The push switch can be paired from the log panel's control list
+	const { pairingClass, pairOnPress } = usePairable('select.encoder')
 
 	const onPointerDown = (start: PointerEvent<HTMLDivElement>) => {
+		if(pairOnPress(start))
+			return
+
 		const rect = start.currentTarget.getBoundingClientRect()
 		const cx = rect.left + rect.width / 2
 		const cy = rect.top + rect.height / 2
@@ -200,7 +241,7 @@ export function Encoder({ x, y }: Point) {
 			tabIndex={0}
 			aria-label="select encoder"
 			aria-valuenow={angle / ENCODER_DETENT}
-			className={classes.encoder}
+			className={cn(classes.encoder, pairingClass)}
 			style={at(x, y)}
 			onPointerDown={onPointerDown}
 			onKeyDown={key => {

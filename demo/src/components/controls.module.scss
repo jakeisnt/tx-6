@@ -360,3 +360,27 @@
 		inset 0 u(-3) u(5) rgba(0, 0, 0, 0.12),
 		0 0 0 u(1) rgba(0, 0, 0, 0.08);
 }
+
+// ─── Pairing mode ────────────────────────────────────────────────────────────
+
+.pairable {
+	cursor: pointer;
+	outline: u(3) dashed rgba(253, 98, 25, 0.45);
+	outline-offset: u(8);
+
+	&:active {
+		cursor: pointer;
+	}
+}
+
+.armed {
+	outline: u(5) solid #fd6219;
+	outline-offset: u(8);
+	animation: armed 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes armed {
+	to {
+		outline-color: rgba(253, 98, 25, 0.25);
+	}
+}

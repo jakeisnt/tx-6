@@ -69,7 +69,11 @@ describe('webBluetooth', () => {
 		})
 		expect(fake.characteristic.startNotifications).toHaveBeenCalled()
 
+		const onPacket = mock()
+		tx6.on('packet', onPacket)
+
 		fake.characteristic.notify(0x80, 0x80, 0xb0, 0x19, 0x7f, 0x81, 0x07, 0x40)
+		expect(onPacket).toHaveBeenCalledWith(new Uint8Array([0x80, 0x80, 0xb0, 0x19, 0x7f, 0x81, 0x07, 0x40]))
 		expect(tx6.getValue('input1.button')).toEqual({ pressed: true, value: 127 })
 		expect(tx6.getValue('input1.eq1')).toEqual({ progress: 64 / 127, value: 64 })
 

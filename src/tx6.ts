@@ -1,6 +1,15 @@
-import { decodeMidiMessage, type TX6Event, type TX6EventParameters, type TX6EventType } from './controls.js'
+import {
+	decodeControlValue,
+	resolveBinding,
+	type TX6Bindings,
+	type TX6Event,
+	type TX6EventParameters,
+	type TX6EventType,
+	type TX6Source, 
+	toSource
+} from './controls.js'
 import { Emitter } from './emitter.js'
-import { type MidiMessage, toMidiMessage } from './midi.js'
+import { asControlInput, type MidiMessage, toMidiMessage } from './midi.js'
 import type { TX6Transport, TX6TransportSink } from './transport.js'
 
 export type TX6ConnectionStatus = 'disconnected' | 'connecting' | 'connected'
@@ -10,6 +19,20 @@ export interface TX6Options {
 	transport?: TX6Transport
 	/** Only accept messages on this MIDI channel (0–15). Defaults to any channel. */
 	channel?: number
+	/** Custom pairings of MIDI sources to controls, applied over the default map. */
+	bindings?: TX6Bindings
+}
+
+/** Where a message came from: the connected transport, or {@link TX6.receive}. */
+export type TX6MessageOrigin = 'device' | 'local'
+
+/** What the TX6 made of a received message. */
+export interface TX6MessageInfo {
+	origin: TX6MessageOrigin
+	/** The CC or note the message came from, if it was one. */
+	source?: TX6Source
+	/** The control event it decoded to, if any. */
+	event?: TX6Event
 }
 
 export interface TX6ConnectionState {
@@ -22,8 +45,12 @@ export type TX6Events =
 	& {
 		/** Any decoded control event. */
 		event: [event: TX6Event]
-		/** Every raw MIDI message received, including ones that aren't TX-6 controls. */
-		message: [message: MidiMessage]
+		/** Every MIDI message received, including ones that aren't TX-6 controls. */
+		message: [message: MidiMessage, info: TX6MessageInfo]
+		/** Raw bytes from the transport before parsing, e.g. one BLE-MIDI packet. */
+		packet: [bytes: Uint8Array]
+		/** Custom pairings changed. */
+		bindings: [bindings: TX6Bindings]
 		status: [status: TX6ConnectionStatus]
 		error: [error: unknown]
 		/** Fired after any change to connection state or control values. */
@@ -38,6 +65,7 @@ export class TX6 {
 	readonly #emitter = new Emitter<TX6Events>()
 	readonly #values = new Map<TX6EventType, TX6EventParameters>()
 	readonly #channel: number | undefined
+	#bindings: TX6Bindings
 	#defaultTransport: TX6Transport | undefined
 
 	#state: TX6ConnectionState = { status: 'disconnected', error: undefined }
@@ -49,6 +77,42 @@ export class TX6 {
 	constructor(options: TX6Options = {}) {
 		this.#defaultTransport = options.transport
 		this.#channel = options.channel
+		this.#bindings = Object.freeze({ ...options.bindings })
+	}
+
+	/** Custom pairings, applied over the default map. A new object whenever it changes. */
+	get bindings(): TX6Bindings {
+		return this.#bindings
+	}
+
+	/** The control a source currently decodes to, if any. */
+	resolve(source: TX6Source): TX6EventType | undefined {
+		return resolveBinding(source, this.#bindings)
+	}
+
+	/**
+	 * Pair a source with a control, replacing whatever it mapped to. Any other
+	 * source bound to the same control keeps working, so pairing is additive.
+	 * Pass `null` to ignore the source entirely.
+	 */
+	bind(source: TX6Source, event: TX6EventType | null) {
+		this.setBindings({ ...this.#bindings, [source]: event })
+	}
+
+	/** Drop a custom pairing so the source falls back to the default map. */
+	unbind(source: TX6Source) {
+		if(!Object.hasOwn(this.#bindings, source))
+			return
+
+		const { [source]: _, ...rest } = this.#bindings
+		this.setBindings(rest)
+	}
+
+	/** Replace every custom pairing at once; pass `{}` to restore the defaults. */
+	setBindings(bindings: TX6Bindings) {
+		this.#bindings = Object.freeze({ ...bindings })
+		this.#emitter.emit('bindings', this.#bindings)
+		this.#emitter.emit('change')
 	}
 
 	get status() {
@@ -103,7 +167,11 @@ export class TX6 {
 		const sink: TX6TransportSink = {
 			message: message => {
 				if(isCurrent())
-					this.receive(message)
+					this.#receive(message, 'device')
+			},
+			packet: bytes => {
+				if(isCurrent())
+					this.#emitter.emit('packet', bytes)
 			},
 			disconnected: error => {
 				if(!isCurrent())
@@ -171,13 +239,22 @@ export class TX6 {
 	 * handy for tests, recordings, or wiring up a MIDI source by hand.
 	 */
 	receive(input: MidiMessage | ArrayLike<number>) {
+		this.#receive(input, 'local')
+	}
+
+	#receive(input: MidiMessage | ArrayLike<number>, origin: TX6MessageOrigin) {
 		const message = 'status' in input ? input : toMidiMessage(input)
 		if(!message)
 			return
 
-		this.#emitter.emit('message', message)
+		const control = asControlInput(message)
+		const source = control && toSource(control)
+		const accepted = control && (this.#channel === undefined || control.channel === this.#channel)
+		const target = accepted ? this.resolve(source!) : undefined
+		const decoded = target && decodeControlValue(target, control!.value)
 
-		const decoded = decodeMidiMessage(message, { channel: this.#channel })
+		this.#emitter.emit('message', message, { origin, source, event: decoded })
+
 		if(!decoded)
 			return
 
