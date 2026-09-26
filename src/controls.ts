@@ -1,4 +1,4 @@
-import { asControlChange, type ControlChange, type MidiMessage } from './midi.js'
+import { asControlInput, type ControlChange, type ControlInput, type MidiMessage } from './midi.js'
 
 export const INPUTS = [1, 2, 3, 4, 5, 6] as const
 export type TX6Input = typeof INPUTS[number]
@@ -67,24 +67,59 @@ export const TX6_CONTROLLERS: ReadonlyMap<number, { event: TX6EventType, kind: C
 
 export const TX6_EVENT_TYPES: readonly TX6EventType[] = [...TX6_CONTROLLERS.values()].map(control => control.event)
 
+const KIND_OF = new Map<TX6EventType, ControlKind>([...TX6_CONTROLLERS.values()].map(control => [control.event, control.kind]))
+
 export function isTX6EventType(value: unknown): value is TX6EventType {
-	return typeof value === 'string' && (TX6_EVENT_TYPES as readonly string[]).includes(value)
+	return typeof value === 'string' && KIND_OF.has(value as TX6EventType)
 }
 
-/** Decode a Control Change from the TX-6 into a control event. */
-export function decodeControlChange({ controller, value }: ControlChange): TX6Event | undefined {
-	const control = TX6_CONTROLLERS.get(controller)
-	if(!control)
-		return undefined
+/**
+ * Identifies where a control's messages come from, independent of channel:
+ * `cc:<controller>` or `note:<note number>`.
+ */
+export type TX6Source = `cc:${number}` | `note:${number}`
 
-	switch(control.kind) {
+/**
+ * Custom pairings of MIDI sources to controls. They take precedence over the
+ * default map; `null` unpairs a source the default map would otherwise decode.
+ */
+export type TX6Bindings = Readonly<Partial<Record<TX6Source, TX6EventType | null>>>
+
+export function toSource(input: Pick<ControlInput, 'type' | 'number'>): TX6Source {
+	return `${input.type}:${input.number}`
+}
+
+export function isTX6Source(value: unknown): value is TX6Source {
+	return typeof value === 'string' && /^(cc|note):(\d|[1-9]\d|1[01]\d|12[0-7])$/.test(value)
+}
+
+/**
+ * The control a source maps to by default. Controllers follow
+ * {@link TX6_CONTROLLERS}; notes use the same numbering, as the original
+ * status-agnostic decoder did.
+ */
+export function defaultBinding(source: TX6Source): TX6EventType | undefined {
+	return TX6_CONTROLLERS.get(Number(source.slice(source.indexOf(':') + 1)))?.event
+}
+
+/** Resolve a source to a control, honouring custom `bindings` first. */
+export function resolveBinding(source: TX6Source, bindings?: TX6Bindings): TX6EventType | undefined {
+	if(bindings && Object.hasOwn(bindings, source))
+		return bindings[source] ?? undefined
+
+	return defaultBinding(source)
+}
+
+/** Decode a 7-bit value for a given control into its event payload. */
+export function decodeControlValue(event: TX6EventType, value: number): TX6Event | undefined {
+	switch(KIND_OF.get(event)) {
 	case 'slider':
 		// Sliders send 0 at the top of their travel
-		return { event: control.event, progress: 1 - value / 127, value } as TX6Event
+		return { event, progress: 1 - value / 127, value } as TX6Event
 	case 'knob':
-		return { event: control.event, progress: value / 127, value } as TX6Event
+		return { event, progress: value / 127, value } as TX6Event
 	case 'button':
-		return { event: control.event, pressed: value >= 64, value } as TX6Event
+		return { event, pressed: value >= 64, value } as TX6Event
 	case 'encoder': {
 		// Relative, two's complement: 1..63 clockwise, 65..127 counter-clockwise
 		const delta = value < 64 ? value : value - 128
@@ -93,14 +128,33 @@ export function decodeControlChange({ controller, value }: ControlChange): TX6Ev
 
 		return { event: 'select.encoder', direction: delta > 0 ? 'right' : 'left', delta, value }
 	}
+	default:
+		return undefined
 	}
 }
 
-/** Decode a raw MIDI message into a TX-6 control event, if it is one. */
-export function decodeMidiMessage(message: MidiMessage, options: { channel?: number } = {}): TX6Event | undefined {
-	const cc = asControlChange(message)
-	if(!cc || (options.channel !== undefined && cc.channel !== options.channel))
+/** Decode a Control Change from the TX-6 into a control event, using the default map. */
+export function decodeControlChange({ controller, value }: ControlChange): TX6Event | undefined {
+	const control = TX6_CONTROLLERS.get(controller)
+	return control && decodeControlValue(control.event, value)
+}
+
+export interface DecodeOptions {
+	/** Only accept messages on this MIDI channel (0–15). */
+	channel?: number
+	/** Custom pairings, applied over the default map. */
+	bindings?: TX6Bindings
+}
+
+/**
+ * Decode a raw MIDI message (Control Change, Note On or Note Off) into a
+ * TX-6 control event, if it maps to one.
+ */
+export function decodeMidiMessage(message: MidiMessage, options: DecodeOptions = {}): TX6Event | undefined {
+	const input = asControlInput(message)
+	if(!input || (options.channel !== undefined && input.channel !== options.channel))
 		return undefined
 
-	return decodeControlChange(cc)
+	const event = resolveBinding(toSource(input), options.bindings)
+	return event && decodeControlValue(event, input.value)
 }

@@ -45,8 +45,11 @@ export function webMidi(options: WebMidiTransportOptions = {}): TX6Transport {
 				throw new Error('No TX-6 MIDI input found')
 
 			const onMessage = (event: { data?: Uint8Array | null }) => {
-				if(event.data)
-					sink.message(event.data)
+				if(!event.data)
+					return
+
+				sink.packet?.(Uint8Array.from(event.data))
+				sink.message(event.data)
 			}
 
 			const onStateChange = (event: { port?: { name?: string | null, state?: string } | null }) => {

@@ -58,3 +58,38 @@ export function asControlChange(message: MidiMessage): ControlChange | undefined
 		value: message.data[1]! & 0x7f
 	}
 }
+
+/** A Control Change or note message, reduced to what's needed to identify and read a control. */
+export interface ControlInput {
+	type: 'cc' | 'note'
+	channel: number
+	/** Controller or note number. */
+	number: number
+	/** Controller value or note velocity; Note Off always reads 0. */
+	value: number
+}
+
+/**
+ * Returns the control-like input carried by `message`: a Control Change,
+ * Note On or Note Off. Anything else is `undefined`.
+ */
+export function asControlInput(message: MidiMessage): ControlInput | undefined {
+	if(message.data.length < 2)
+		return undefined
+
+	const type = message.status & 0xf0
+	const channel = message.status & 0x0f
+	const number = message.data[0]! & 0x7f
+	const value = message.data[1]! & 0x7f
+
+	switch(type) {
+	case 0xb0:
+		return { type: 'cc', channel, number, value }
+	case 0x90:
+		return { type: 'note', channel, number, value }
+	case 0x80:
+		return { type: 'note', channel, number, value: 0 }
+	default:
+		return undefined
+	}
+}

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { decodeControlChange, decodeMidiMessage, TX6_EVENT_TYPES } from '../src/index.ts'
+import { decodeControlChange, decodeMidiMessage, isTX6Source, TX6_EVENT_TYPES } from '../src/index.ts'
 
 const cc = (controller: number, value: number) => decodeControlChange({ channel: 0, controller, value })
 
@@ -43,13 +43,32 @@ describe('decodeControlChange', () => {
 })
 
 describe('decodeMidiMessage', () => {
-	test('only decodes control changes', () => {
-		expect(decodeMidiMessage({ status: 0x90, data: [1, 127] })).toBeUndefined()
-		expect(decodeMidiMessage({ status: 0xb3, data: [25, 127] })).toMatchObject({ event: 'input1.button' })
+	test('decodes control changes and notes', () => {
+		expect(decodeMidiMessage({ status: 0xb3, data: [25, 127] })).toMatchObject({ event: 'input1.button', pressed: true })
+		expect(decodeMidiMessage({ status: 0x90, data: [25, 100] })).toMatchObject({ event: 'input1.button', pressed: true })
+		expect(decodeMidiMessage({ status: 0x80, data: [25, 100] })).toMatchObject({ event: 'input1.button', pressed: false })
+		expect(decodeMidiMessage({ status: 0xe0, data: [25, 100] })).toBeUndefined()
+		expect(decodeMidiMessage({ status: 0x90, data: [60, 100] })).toBeUndefined()
+	})
+
+	test('custom bindings override the default map', () => {
+		const bindings = { 'cc:74': 'input3.slider', 'note:40': 'fx1', 'cc:1': null } as const
+		expect(decodeMidiMessage({ status: 0xb0, data: [74, 0] }, { bindings })).toEqual({ event: 'input3.slider', progress: 1, value: 0 })
+		expect(decodeMidiMessage({ status: 0x91, data: [40, 127] }, { bindings })).toMatchObject({ event: 'fx1', pressed: true })
+		expect(decodeMidiMessage({ status: 0xb0, data: [1, 0] }, { bindings })).toBeUndefined()
+		expect(decodeMidiMessage({ status: 0xb0, data: [2, 0] }, { bindings })).toMatchObject({ event: 'input2.slider' })
 	})
 
 	test('channel filter', () => {
 		expect(decodeMidiMessage({ status: 0xb3, data: [25, 127] }, { channel: 0 })).toBeUndefined()
 		expect(decodeMidiMessage({ status: 0xb3, data: [25, 127] }, { channel: 3 })).toBeDefined()
 	})
+})
+
+test('isTX6Source', () => {
+	expect(isTX6Source('cc:0')).toBe(true)
+	expect(isTX6Source('note:127')).toBe(true)
+	expect(isTX6Source('cc:128')).toBe(false)
+	expect(isTX6Source('cc:01')).toBe(false)
+	expect(isTX6Source('pb:1')).toBe(false)
 })

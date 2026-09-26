@@ -5,7 +5,9 @@ import { webBluetooth } from 'use-tx-6/web-bluetooth'
 import { webMidi } from 'use-tx-6/web-midi'
 import classes from './app.module.scss'
 import Device from './components/Device.tsx'
+import MidiLog from './components/MidiLog.tsx'
 import { cn } from './lib/cn.ts'
+import { loadBindings, PairingProvider, persistBindings } from './lib/pairing.tsx'
 
 const hasBluetooth = typeof navigator !== 'undefined' && 'bluetooth' in navigator
 const hasMidi = typeof navigator !== 'undefined' && 'requestMIDIAccess' in navigator
@@ -79,14 +81,21 @@ function Toolbar() {
 }
 
 export default function App() {
-	const device = useMemo(() => new TX6({ transport: webBluetooth() }), [])
+	const device = useMemo(() => new TX6({ transport: webBluetooth(), bindings: loadBindings() }), [])
+
+	useEffect(() => persistBindings(device), [device])
 
 	return (
 		<TX6Provider device={device}>
-			<main className={classes.page}>
-				<Toolbar />
-				<Device />
-			</main>
+			<PairingProvider>
+				<main className={classes.page}>
+					<Toolbar />
+					<div className={classes.workspace}>
+						<Device />
+						<MidiLog />
+					</div>
+				</main>
+			</PairingProvider>
 		</TX6Provider>
 	)
 }
