@@ -47,7 +47,10 @@
     "lint:fix": "biome check --write .",
     "test": "bun test",
     "check": "bun run lint && bun run typecheck && bun test && bun run build",
-    "prepublishOnly": "bun run check"
+    "prepublishOnly": "bun run check",
+    "demo": "bun run --cwd demo dev",
+    "demo:build": "bun run --cwd demo build",
+    "demo:deploy": "bun run --cwd demo deploy"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -66,5 +69,8 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "^7.0.2"
-  }
+  },
+  "workspaces": [
+    "demo"
+  ]
 }

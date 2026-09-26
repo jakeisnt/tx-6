@@ -1,0 +1,362 @@
+@use "units" as *;
+
+.control {
+	@include placed;
+	touch-action: none;
+	cursor: grab;
+	outline: none;
+
+	&:focus-visible {
+		outline: u(3) solid rgba(253, 98, 25, 0.8);
+		outline-offset: u(6);
+	}
+
+	&:active {
+		cursor: grabbing;
+	}
+}
+
+// ─── EQ knobs ────────────────────────────────────────────────────────────────
+// Aluminium rim that stays put (so its lighting doesn't rotate), a rotating layer
+// with the knurl and the pointer groove, and a coloured well sunk into the centre.
+
+.knob {
+	@extend .control;
+	width: u(72);
+	height: u(72);
+	border-radius: 50%;
+	background: radial-gradient(circle at 45% 35%, #d6d6d8 0%, #c8c8ca 55%, #b9b9bb 100%);
+	box-shadow:
+		inset 0 u(2) u(1) rgba(255, 255, 255, 0.75),
+		inset 0 u(-2) u(2) rgba(0, 0, 0, 0.18),
+		0 u(1) u(1) rgba(0, 0, 0, 0.3),
+		u(4) u(10) u(12) rgba(0, 0, 0, 0.22),
+		u(8) u(20) u(26) rgba(0, 0, 0, 0.14);
+
+	--cap: #1e1c28;
+	--cap-light: #3a3746;
+}
+
+.orange {
+	--cap: #fd6219;
+	--cap-light: #ff8a4a;
+}
+
+.cream {
+	--cap: #efe8e2;
+	--cap-light: #fbf8f5;
+}
+
+.knobTurn {
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	transition: transform 60ms linear;
+
+	// Fine knurl on the outer edge
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		@include knurl(96, rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.12));
+		mask: radial-gradient(circle closest-side, transparent 0 calc(100% - var(--u) * 3.5), #000 calc(100% - var(--u) * 3));
+	}
+}
+
+// Pointer groove from the rim into the well.
+.knobGroove {
+	position: absolute;
+	left: 50%;
+	top: 0;
+	width: u(7);
+	height: 50%;
+	transform: translateX(-50%);
+	border-radius: u(3.5) u(3.5) 0 0;
+	background: var(--cap);
+	box-shadow: inset 0 u(2) u(2) rgba(0, 0, 0, 0.35);
+}
+
+.knobWell {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: u(35);
+	height: u(35);
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	background: radial-gradient(circle at 50% 70%, var(--cap-light), var(--cap) 65%);
+	box-shadow:
+		inset 0 u(5) u(5) rgba(0, 0, 0, 0.4),
+		inset 0 u(-1) u(1) rgba(255, 255, 255, 0.25),
+		0 u(1) 0 rgba(255, 255, 255, 0.5);
+}
+
+// ─── Faders ──────────────────────────────────────────────────────────────────
+
+.fader {
+	@extend .control;
+	cursor: ns-resize;
+	width: u(46);
+	height: u(450);
+	border-radius: u(23);
+	background: linear-gradient(180deg, #b9b9bb, #c6c6c8 50%, #bdbdbf);
+	box-shadow:
+		inset 0 u(3) u(4) rgba(0, 0, 0, 0.3),
+		inset 0 u(-2) u(2) rgba(255, 255, 255, 0.5),
+		0 u(1) 0 rgba(255, 255, 255, 0.6),
+		0 u(-1) 0 rgba(0, 0, 0, 0.08);
+
+	&:active {
+		cursor: ns-resize;
+	}
+}
+
+.faderSlit {
+	position: absolute;
+	left: 50%;
+	top: u(8);
+	bottom: u(8);
+	width: u(24);
+	transform: translateX(-50%);
+	border-radius: u(12);
+	background: linear-gradient(90deg, #050506, #111114 40%, #1b1b1e 60%, #050506);
+	box-shadow:
+		inset 0 u(4) u(5) rgba(0, 0, 0, 0.9),
+		0 u(1) 0 rgba(255, 255, 255, 0.35);
+}
+
+.faderThumb {
+	position: absolute;
+	left: 50%;
+	top: 0;
+	width: u(46);
+	height: u(46);
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	background: radial-gradient(circle at 42% 32%, #f7f7f8 0%, #d8d8da 40%, #b2b2b4 80%, #9d9d9f 100%);
+	box-shadow:
+		inset 0 u(1) u(1) #fff,
+		inset 0 u(-3) u(4) rgba(0, 0, 0, 0.2),
+		0 u(2) u(2) rgba(0, 0, 0, 0.35),
+		0 u(8) u(10) rgba(0, 0, 0, 0.35);
+	transition: top 40ms linear;
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+
+.button {
+	@extend .control;
+	cursor: pointer;
+	transition: transform 60ms ease-out, box-shadow 60ms ease-out, filter 60ms ease-out;
+
+	&:active {
+		cursor: pointer;
+	}
+}
+
+.pressed {
+	filter: brightness(0.94);
+}
+
+.channelButton {
+	@extend .button;
+	width: u(49);
+	height: u(120);
+	border-radius: u(9);
+	background: linear-gradient(180deg, #d3d3d5, #c3c3c5 60%, #b6b6b8);
+	box-shadow:
+		inset 0 u(2) u(1) rgba(255, 255, 255, 0.85),
+		inset u(1) 0 u(1) rgba(255, 255, 255, 0.4),
+		inset 0 u(-2) u(2) rgba(0, 0, 0, 0.15),
+		0 u(1) u(1) rgba(0, 0, 0, 0.35),
+		0 u(5) u(6) rgba(0, 0, 0, 0.25),
+		u(2) u(12) u(16) rgba(0, 0, 0, 0.15);
+
+	&.pressed {
+		transform: translate(-50%, calc(-50% + var(--u) * 2));
+		box-shadow:
+			inset 0 u(2) u(1) rgba(255, 255, 255, 0.6),
+			inset 0 u(-1) u(2) rgba(0, 0, 0, 0.2),
+			0 u(1) u(1) rgba(0, 0, 0, 0.4),
+			0 u(2) u(3) rgba(0, 0, 0, 0.2);
+	}
+}
+
+// Large round FX buttons: a machined disc with a coloured pill inlay.
+.fxButton {
+	@extend .button;
+	width: u(196);
+	height: u(196);
+	border-radius: 50%;
+	background:
+		radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.18), transparent 60%),
+		linear-gradient(180deg, #bcbcbe, #afafb1 55%, #a4a4a6);
+	box-shadow:
+		inset 0 u(3) u(1) rgba(255, 255, 255, 0.7),
+		inset 0 u(-3) u(3) rgba(0, 0, 0, 0.22),
+		0 0 0 u(1.5) rgba(0, 0, 0, 0.12),
+		0 u(3) u(3) rgba(0, 0, 0, 0.3),
+		u(4) u(16) u(22) rgba(0, 0, 0, 0.22);
+
+	&.pressed {
+		transform: translate(-50%, -50%) scale(0.985);
+		box-shadow:
+			inset 0 u(2) u(1) rgba(255, 255, 255, 0.5),
+			inset 0 u(-2) u(3) rgba(0, 0, 0, 0.25),
+			0 0 0 u(1.5) rgba(0, 0, 0, 0.14),
+			0 u(1) u(2) rgba(0, 0, 0, 0.35),
+			u(2) u(6) u(10) rgba(0, 0, 0, 0.2);
+	}
+}
+
+.pill {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: u(140);
+	height: u(62);
+	transform: translate(-50%, -50%);
+	border-radius: u(14);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: u(16);
+	background: linear-gradient(180deg, #25242c, #1b1a21);
+	box-shadow:
+		inset 0 u(3) u(4) rgba(0, 0, 0, 0.6),
+		inset 0 u(-1) u(1) rgba(255, 255, 255, 0.12),
+		0 u(1) 0 rgba(255, 255, 255, 0.5);
+}
+
+.pillOrange {
+	background: linear-gradient(180deg, #f6632a, #ee5419);
+	box-shadow:
+		inset 0 u(3) u(4) rgba(120, 30, 0, 0.35),
+		inset 0 u(-1) u(1) rgba(255, 255, 255, 0.2),
+		0 u(1) 0 rgba(255, 255, 255, 0.5);
+}
+
+.pillBar {
+	width: u(5);
+	height: u(32);
+	border-radius: u(1);
+	background: #ececee;
+	box-shadow: 0 0 u(1) rgba(255, 255, 255, 0.4);
+}
+
+.shiftButton {
+	@extend .button;
+	width: u(192);
+	height: u(100);
+	border-radius: u(14);
+	background: linear-gradient(180deg, #c3c3c5, #b3b3b5 60%, #a9a9ab);
+	box-shadow:
+		inset 0 u(2) u(1) rgba(255, 255, 255, 0.75),
+		inset u(1) 0 u(1) rgba(255, 255, 255, 0.35),
+		inset 0 u(-2) u(2) rgba(0, 0, 0, 0.18),
+		0 u(1) u(1) rgba(0, 0, 0, 0.35),
+		0 u(5) u(6) rgba(0, 0, 0, 0.22),
+		u(3) u(14) u(18) rgba(0, 0, 0, 0.15);
+
+	&.pressed {
+		transform: translate(-50%, calc(-50% + var(--u) * 2));
+		box-shadow:
+			inset 0 u(2) u(1) rgba(255, 255, 255, 0.55),
+			inset 0 u(-1) u(2) rgba(0, 0, 0, 0.2),
+			0 u(1) u(1) rgba(0, 0, 0, 0.4),
+			0 u(2) u(3) rgba(0, 0, 0, 0.2);
+	}
+}
+
+.shiftDot {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: u(24);
+	height: u(24);
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	background: radial-gradient(circle at 50% 35%, #ffffff, #e9e9eb 70%);
+	box-shadow:
+		inset 0 u(-1) u(2) rgba(0, 0, 0, 0.15),
+		0 u(1) u(1) rgba(0, 0, 0, 0.2);
+}
+
+// ─── Select encoder ──────────────────────────────────────────────────────────
+
+.encoder {
+	@extend .control;
+	cursor: grab;
+	width: u(240);
+	height: u(240);
+	border-radius: 50%;
+	// A shallow dish machined into the panel
+	background: linear-gradient(160deg, #cfcfd1, #c1c1c3 50%, #b4b4b6);
+	box-shadow:
+		0 0 0 u(2) rgba(35, 35, 40, 0.55),
+		0 u(1) 0 u(2.5) rgba(255, 255, 255, 0.35),
+		inset 0 u(6) u(10) rgba(0, 0, 0, 0.14),
+		inset 0 u(-2) u(2) rgba(255, 255, 255, 0.4);
+}
+
+// The two diagonal index lines across the dish.
+.encoderTick {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: u(52);
+	height: u(2);
+	background: rgba(35, 35, 40, 0.55);
+	box-shadow: 0 u(1) 0 rgba(255, 255, 255, 0.35);
+	transform-origin: 0 50%;
+	transform: rotate(var(--angle)) translateX(u(68));
+}
+
+.encoderKnob {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: u(140);
+	height: u(140);
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	background: #d9d5d4;
+	box-shadow:
+		0 u(2) u(2) rgba(0, 0, 0, 0.35),
+		u(6) u(18) u(22) rgba(0, 0, 0, 0.35),
+		u(12) u(30) u(40) rgba(0, 0, 0, 0.18);
+	transition: transform 60ms ease-out, box-shadow 60ms ease-out;
+
+	&.pressed {
+		transform: translate(-50%, -50%) scale(0.98);
+		box-shadow:
+			0 u(1) u(1) rgba(0, 0, 0, 0.4),
+			u(3) u(8) u(12) rgba(0, 0, 0, 0.3);
+	}
+}
+
+.encoderKnurl {
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	@include knurl(150, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.22));
+	mask: radial-gradient(circle closest-side, transparent 0 calc(100% - var(--u) * 9), #000 calc(100% - var(--u) * 8));
+	transition: transform 80ms ease-out;
+}
+
+// Domed white cap.
+.encoderFace {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: u(122);
+	height: u(122);
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+	background: radial-gradient(circle at 42% 34%, #f6f4f3 0%, #e4e0df 45%, #d3cfce 80%, #c6c2c1 100%);
+	box-shadow:
+		inset 0 u(2) u(2) rgba(255, 255, 255, 0.9),
+		inset 0 u(-3) u(5) rgba(0, 0, 0, 0.12),
+		0 0 0 u(1) rgba(0, 0, 0, 0.08);
+}
