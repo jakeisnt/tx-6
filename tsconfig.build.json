@@ -1,0 +1,16 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		// No DOM, Node or Bun globals: the library must not depend on any host environment
+		"lib": ["es2022"],
+		"types": [],
+		"allowImportingTsExtensions": false,
+		"noEmit": false,
+		"rootDir": "src",
+		"outDir": "dist",
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true
+	},
+	"include": ["src"]
+}

@@ -1,0 +1,22 @@
+// Everything is laid out in photo pixels (see lib/geometry.ts) and scaled by --u.
+@function u($n) {
+	@return calc(#{$n} * var(--u));
+}
+
+// Centre an element on the (--x, --y) point set by `at()`.
+@mixin placed {
+	position: absolute;
+	left: calc(var(--x) * var(--u));
+	top: calc(var(--y) * var(--u));
+	transform: translate(-50%, -50%);
+}
+
+// Knurled edge, as on the knob rims and the select encoder.
+@mixin knurl($teeth: 90, $dark: rgba(0, 0, 0, 0.16), $light: rgba(255, 255, 255, 0.22)) {
+	$step: calc(360deg / $teeth);
+	background: repeating-conic-gradient(from 0deg, $dark 0deg calc($step / 2), $light calc($step / 2) $step);
+}
+
+$panel-top: #dedee0;
+$panel-bottom: #a2a1a4;
+$ink: #3c3b41;
