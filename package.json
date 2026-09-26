@@ -50,7 +50,8 @@
     "prepublishOnly": "bun run check",
     "demo": "bun run --cwd demo dev",
     "demo:build": "bun run --cwd demo build",
-    "demo:deploy": "bun run --cwd demo deploy"
+    "demo:deploy": "wrangler deploy",
+    "demo:preview": "wrangler dev"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -68,7 +69,8 @@
     "@types/react-dom": "^19.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.141.0"
   },
   "workspaces": [
     "demo"
