@@ -43,6 +43,17 @@ If you want to access multiple attributes at the same time, use `useTX6Attribute
 const [{ progress: eq1 }, { progress: eq2 }, { progress: eq3 }] = useTX6Attributes(['input1.eq1', 'input1.eq2', 'input1.eq3'])
 ```
 
+## Demo
+The `demo/` workspace is a browser remote for the TX-6, deployed as a static-assets [Cloudflare Worker](https://developers.cloudflare.com/workers/static-assets/) configured in `wrangler.jsonc`.
+
+```
+bun run demo          # local dev server
+bun run demo:preview  # build and serve with the Workers runtime
+bun run demo:deploy   # build and deploy with wrangler
+```
+
+`wrangler deploy` runs the demo build itself, so connecting the repo to Cloudflare Workers Builds needs no extra build command.
+
 ## Thanks
 Inspired by [this demo](https://twitter.com/hturan/status/1523702486258782208) by [@hturan@twitter.com](https://twitter.com/hturan).
 
