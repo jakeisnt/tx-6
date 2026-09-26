@@ -6,6 +6,19 @@ A set of React hooks for interacting with teenage engineering TX-6 over BLE MIDI
 yarn add use-tx-6
 ```
 
+## Putting the TX-6 in MIDI mode
+`use-tx-6` reads the MIDI CC messages the TX-6 sends when **ctrl out** (controller mode) is on. That setting is off by default, so turn it on first:
+
+1. Open the **system menu** and go to **midi**.
+2. Turn the select encoder to find **CTRL** and tap select until it reads **OUT**.
+3. Press **shift** to leave the menu. The **TX** marker on the display flickers when you move a fader.
+
+To connect over **Bluetooth**, also go to **ble** in the system menu and pick **ACCEPT**. Bluetooth is off by default. Then connect with `webBluetooth()` from Chrome or Edge. Don't pick **SCAN**: in that mode the TX-6 looks for other devices to connect to and won't accept a browser.
+
+To connect over **USB**, plug in a USB-C cable and use the `webMidi()` transport. `webMidi()` also works with a TX-6 you've paired over Bluetooth in your OS's MIDI settings.
+
+See [docs/midi.md](docs/midi.md) for the full MIDI reference: every outgoing and incoming CC, notes, program changes, local control and the POTS/CC menu.
+
 ## Usage
 The following demo will let you adjust the font size of the text using the slider for channel 1:
 ```tsx

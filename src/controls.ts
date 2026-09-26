@@ -44,7 +44,7 @@ export type TX6Event = { [E in TX6EventType]: { event: E } & TX6EventParameterMa
 
 type ControlKind = 'slider' | 'knob' | 'button' | 'encoder'
 
-/** Controller number → control, as sent by the TX-6 in its default MIDI mode. */
+/** Controller number → control, as sent by the TX-6 in controller mode (midi menu: ctrl out). See docs/midi.md. */
 export const TX6_CONTROLLERS: ReadonlyMap<number, { event: TX6EventType, kind: ControlKind }> = (() => {
 	const map = new Map<number, { event: TX6EventType, kind: ControlKind }>()
 
