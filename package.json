@@ -1,65 +1,25 @@
 {
-  "name": "use-tx-6",
-  "version": "2.0.0",
-  "description": "Platform-agnostic driver and React hooks for the teenage engineering TX-6 over MIDI",
-  "keywords": [
-    "teenage-engineering",
-    "tx-6",
-    "midi",
-    "ble-midi",
-    "web-bluetooth",
-    "web-midi",
-    "react",
-    "hooks"
-  ],
-  "repository": "https://github.com/darnfish/use-tx-6.git",
-  "author": "William Gibson <william@darn.fish>",
-  "license": "MIT",
+  "name": "tx-6-workspace",
+  "private": true,
   "type": "module",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./react": {
-      "types": "./dist/react/index.d.ts",
-      "default": "./dist/react/index.js"
-    },
-    "./web-bluetooth": {
-      "types": "./dist/transports/web-bluetooth.d.ts",
-      "default": "./dist/transports/web-bluetooth.js"
-    },
-    "./web-midi": {
-      "types": "./dist/transports/web-midi.d.ts",
-      "default": "./dist/transports/web-midi.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "dist",
-    "src"
+  "workspaces": [
+    "packages/tx-6",
+    "packages/use-tx-6",
+    "demo"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "build": "bun run --cwd packages/tx-6 build && bun run --cwd packages/use-tx-6 build",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "bun test",
-    "check": "bun run lint && bun run typecheck && bun test && bun run build",
-    "prepublishOnly": "bun run check",
+    "smoke": "node scripts/smoke.mjs",
+    "check": "bun run lint && bun run typecheck && bun test && bun run build && bun run smoke",
+    "pack": "rm -rf packed && mkdir packed && (cd packages/tx-6 && bun pm pack --destination ../../packed) && (cd packages/use-tx-6 && bun pm pack --destination ../../packed)",
     "demo": "bun run --cwd demo dev",
     "demo:build": "bun run --cwd demo build",
     "demo:deploy": "wrangler deploy",
     "demo:preview": "wrangler dev"
-  },
-  "peerDependencies": {
-    "react": ">=18"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
@@ -67,12 +27,11 @@
     "@types/bun": "^1.4.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@ulnd/tx-6": "workspace:*",
+    "@ulnd/use-tx-6": "workspace:*",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "typescript": "^7.0.2",
     "wrangler": "^4.141.0"
-  },
-  "workspaces": [
-    "demo"
-  ]
+  }
 }

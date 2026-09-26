@@ -1,6 +1,6 @@
+import type { TX6Event } from '@ulnd/tx-6'
+import { useTX6, useTX6Attributes, useTX6Device } from '@ulnd/use-tx-6'
 import { useEffect, useState } from 'react'
-import type { TX6Event } from 'use-tx-6'
-import { useTX6, useTX6Attributes, useTX6Device } from 'use-tx-6/react'
 import { cn } from '../lib/cn.ts'
 import { at, LCD as POSITION } from '../lib/geometry.ts'
 import classes from './lcd.module.scss'

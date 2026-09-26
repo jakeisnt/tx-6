@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # npm provenance and trusted publishing
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or later
+      - run: npm install -g npm@latest
+      - run: bun install --frozen-lockfile
+      - run: bun run check
+
+      - name: Check the tag matches both package versions
+        run: |
+          for pkg in packages/tx-6 packages/use-tx-6; do
+            version=$(node -p "require('./$pkg/package.json').version")
+            if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+              echo "$pkg is $version, but the tag is $GITHUB_REF_NAME"
+              exit 1
+            fi
+          done
+
+      # bun pm pack turns workspace: ranges into real versions; npm publish does not
+      - run: bun run pack
+
+      # @ulnd/tx-6 first, since @ulnd/use-tx-6 peers on it
+      - name: Publish
+        run: |
+          npm publish packed/ulnd-tx-6-*.tgz --access public --provenance
+          npm publish packed/ulnd-use-tx-6-*.tgz --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

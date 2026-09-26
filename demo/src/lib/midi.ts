@@ -1,4 +1,4 @@
-import { type TX6, TX6_CONTROLLERS, type TX6EventType } from 'use-tx-6'
+import { type TX6, TX6_CONTROLLERS, type TX6EventType } from '@ulnd/tx-6'
 
 const CONTROLLER_FOR = new Map<TX6EventType, number>([...TX6_CONTROLLERS].map(([controller, { event }]) => [event, controller]))
 

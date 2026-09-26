@@ -1,5 +1,5 @@
-import type { TX6Input } from 'use-tx-6'
-import { useTX6Attribute } from 'use-tx-6/react'
+import type { TX6Input } from '@ulnd/tx-6'
+import { useTX6Attribute } from '@ulnd/use-tx-6'
 
 import { cn } from '../lib/cn.ts'
 import {
