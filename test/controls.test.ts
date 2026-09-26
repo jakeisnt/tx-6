@@ -10,9 +10,9 @@ describe('decodeControlChange', () => {
 		expect(new Set(TX6_EVENT_TYPES).size).toBe(37)
 	})
 
-	test('sliders are inverted', () => {
-		expect(cc(1, 0)).toEqual({ event: 'input1.slider', progress: 1, value: 0 })
-		expect(cc(6, 127)).toEqual({ event: 'input6.slider', progress: 0, value: 127 })
+	test('sliders read 1 at the top of their travel', () => {
+		expect(cc(1, 127)).toEqual({ event: 'input1.slider', progress: 1, value: 127 })
+		expect(cc(6, 0)).toEqual({ event: 'input6.slider', progress: 0, value: 0 })
 	})
 
 	test('eq knobs', () => {
@@ -53,7 +53,7 @@ describe('decodeMidiMessage', () => {
 
 	test('custom bindings override the default map', () => {
 		const bindings = { 'cc:74': 'input3.slider', 'note:40': 'fx1', 'cc:1': null } as const
-		expect(decodeMidiMessage({ status: 0xb0, data: [74, 0] }, { bindings })).toEqual({ event: 'input3.slider', progress: 1, value: 0 })
+		expect(decodeMidiMessage({ status: 0xb0, data: [74, 0] }, { bindings })).toEqual({ event: 'input3.slider', progress: 0, value: 0 })
 		expect(decodeMidiMessage({ status: 0x91, data: [40, 127] }, { bindings })).toMatchObject({ event: 'fx1', pressed: true })
 		expect(decodeMidiMessage({ status: 0xb0, data: [1, 0] }, { bindings })).toBeUndefined()
 		expect(decodeMidiMessage({ status: 0xb0, data: [2, 0] }, { bindings })).toMatchObject({ event: 'input2.slider' })

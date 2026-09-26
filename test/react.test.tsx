@@ -60,7 +60,7 @@ test('hooks track connection state and control values', async () => {
 		transport.send(0xb0, 8, 10)
 		transport.send(0xb0, 13, 20)
 	})
-	expect(text('#slider')).toBe('0')
+	expect(text('#slider')).toBe('1')
 	// input2.eq1 (cc 8) must not leak into input1.eq1
 	expect(text('#eq')).toBe('-,20')
 

@@ -197,46 +197,54 @@ export default function MidiLog() {
 	}
 
 	return (
-		<aside className={classes.panel}>
-			<Pairings />
+		// Collapsed by default; it stays mounted so the log keeps recording while closed
+		<details className={classes.drawer}>
+			<summary className={classes.summary}>
+				midi log &amp; pairing
+				{entries.length > 0 && <span className={classes.count}>{entries.length}</span>}
+			</summary>
 
-			<header className={classes.header}>
-				<h2 className={classes.title}>midi log</h2>
-				<label className={classes.toggle}>
-					<input type="checkbox" checked={includeLocal} onChange={change => setIncludeLocal(change.target.checked)} />
-					on-screen
-				</label>
-				<button type="button" className={classes.chip} onClick={() => setPaused(!paused)}>{paused ? 'resume' : 'pause'}</button>
-				<button type="button" className={classes.chip} onClick={copy} disabled={entries.length === 0}>{copied ? 'copied' : 'copy'}</button>
-				<button type="button" className={classes.chip} onClick={() => setEntries([])} disabled={entries.length === 0}>clear</button>
-			</header>
+			<div className={classes.panel}>
+				<Pairings />
 
-			<ol className={classes.log}>
-				{entries.length === 0 && (
-					<li className={classes.empty}>
-						{status === 'connected' ? 'Waiting for the TX-6… move a fader or press a button.' : 'Connect a TX-6 to see raw packets here.'}
-					</li>
-				)}
-				{entries.map(entry => (
-					<li key={`${entry.origin}-${entry.id}`} className={cn(classes.entry, entry.origin === 'local' && classes.local)}>
-						<div className={classes.meta}>
-							<span>{entry.time}</span>
-							{entry.packet !== undefined
-								? <code className={classes.packet}>{entry.packet}</code>
-								: <span>{entry.origin === 'local' ? 'on-screen' : 'midi'}</span>}
-						</div>
-						{entry.messages.length === 0 && <div className={classes.message}><span className={classes.unmapped}>no complete MIDI messages in packet</span></div>}
-						{entry.messages.map((message, index) => (
-							// biome-ignore lint/suspicious/noArrayIndexKey: messages within a packet never reorder
-							<div key={index} className={classes.message}>
-								<code>{message.bytes}</code>
-								<span>{message.description}</span>
-								<span className={message.event ? classes.mapped : classes.unmapped}>{message.event ?? (message.source ? `${message.source} unmapped` : 'ignored')}</span>
+				<header className={classes.header}>
+					<h2 className={classes.title}>midi log</h2>
+					<label className={classes.toggle}>
+						<input type="checkbox" checked={includeLocal} onChange={change => setIncludeLocal(change.target.checked)} />
+						on-screen
+					</label>
+					<button type="button" className={classes.chip} onClick={() => setPaused(!paused)}>{paused ? 'resume' : 'pause'}</button>
+					<button type="button" className={classes.chip} onClick={copy} disabled={entries.length === 0}>{copied ? 'copied' : 'copy'}</button>
+					<button type="button" className={classes.chip} onClick={() => setEntries([])} disabled={entries.length === 0}>clear</button>
+				</header>
+
+				<ol className={classes.log}>
+					{entries.length === 0 && (
+						<li className={classes.empty}>
+							{status === 'connected' ? 'Waiting for the TX-6… move a fader or press a button.' : 'Connect a TX-6 to see raw packets here.'}
+						</li>
+					)}
+					{entries.map(entry => (
+						<li key={`${entry.origin}-${entry.id}`} className={cn(classes.entry, entry.origin === 'local' && classes.local)}>
+							<div className={classes.meta}>
+								<span>{entry.time}</span>
+								{entry.packet !== undefined
+									? <code className={classes.packet}>{entry.packet}</code>
+									: <span>{entry.origin === 'local' ? 'on-screen' : 'midi'}</span>}
 							</div>
-						))}
-					</li>
-				))}
-			</ol>
-		</aside>
+							{entry.messages.length === 0 && <div className={classes.message}><span className={classes.unmapped}>no complete MIDI messages in packet</span></div>}
+							{entry.messages.map((message, index) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: messages within a packet never reorder
+								<div key={index} className={classes.message}>
+									<code>{message.bytes}</code>
+									<span>{message.description}</span>
+									<span className={message.event ? classes.mapped : classes.unmapped}>{message.event ?? (message.source ? `${message.source} unmapped` : 'ignored')}</span>
+								</div>
+							))}
+						</li>
+					))}
+				</ol>
+			</div>
+		</details>
 	)
 }

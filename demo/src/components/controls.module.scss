@@ -29,9 +29,11 @@
 	box-shadow:
 		inset 0 u(2) u(1) rgba(255, 255, 255, 0.75),
 		inset 0 u(-2) u(2) rgba(0, 0, 0, 0.18),
-		0 u(1) u(1) rgba(0, 0, 0, 0.3),
-		u(4) u(10) u(12) rgba(0, 0, 0, 0.22),
-		u(8) u(20) u(26) rgba(0, 0, 0, 0.14);
+		0 0 0 u(1) rgba(0, 0, 0, 0.1),
+		0 u(1) u(1) rgba(0, 0, 0, 0.32),
+		u(1) u(4) u(5) rgba(0, 0, 0, 0.2),
+		u(4) u(12) u(16) rgba(0, 0, 0, 0.16),
+		u(8) u(24) u(32) rgba(0, 0, 0, 0.1);
 
 	--cap: #1e1c28;
 	--cap-light: #3a3746;
@@ -138,8 +140,11 @@
 	box-shadow:
 		inset 0 u(1) u(1) #fff,
 		inset 0 u(-3) u(4) rgba(0, 0, 0, 0.2),
-		0 u(2) u(2) rgba(0, 0, 0, 0.35),
-		0 u(8) u(10) rgba(0, 0, 0, 0.35);
+		0 0 0 u(1) rgba(0, 0, 0, 0.12),
+		0 u(1) u(1) rgba(0, 0, 0, 0.4),
+		0 u(4) u(5) rgba(0, 0, 0, 0.28),
+		u(2) u(10) u(14) rgba(0, 0, 0, 0.22),
+		u(4) u(18) u(24) rgba(0, 0, 0, 0.1);
 	transition: top 40ms linear;
 }
 
@@ -169,9 +174,11 @@
 		inset 0 u(2) u(1) rgba(255, 255, 255, 0.85),
 		inset u(1) 0 u(1) rgba(255, 255, 255, 0.4),
 		inset 0 u(-2) u(2) rgba(0, 0, 0, 0.15),
+		0 0 0 u(1) rgba(0, 0, 0, 0.08),
 		0 u(1) u(1) rgba(0, 0, 0, 0.35),
-		0 u(5) u(6) rgba(0, 0, 0, 0.25),
-		u(2) u(12) u(16) rgba(0, 0, 0, 0.15);
+		0 u(4) u(5) rgba(0, 0, 0, 0.2),
+		u(2) u(10) u(14) rgba(0, 0, 0, 0.16),
+		u(4) u(20) u(28) rgba(0, 0, 0, 0.08);
 
 	&.pressed {
 		transform: translate(-50%, calc(-50% + var(--u) * 2));
@@ -196,8 +203,10 @@
 		inset 0 u(3) u(1) rgba(255, 255, 255, 0.7),
 		inset 0 u(-3) u(3) rgba(0, 0, 0, 0.22),
 		0 0 0 u(1.5) rgba(0, 0, 0, 0.12),
-		0 u(3) u(3) rgba(0, 0, 0, 0.3),
-		u(4) u(16) u(22) rgba(0, 0, 0, 0.22);
+		0 u(1) u(1) rgba(0, 0, 0, 0.3),
+		0 u(4) u(5) rgba(0, 0, 0, 0.2),
+		u(4) u(14) u(20) rgba(0, 0, 0, 0.18),
+		u(8) u(30) u(44) rgba(0, 0, 0, 0.12);
 
 	&.pressed {
 		transform: translate(-50%, -50%) scale(0.985);
@@ -255,9 +264,11 @@
 		inset 0 u(2) u(1) rgba(255, 255, 255, 0.75),
 		inset u(1) 0 u(1) rgba(255, 255, 255, 0.35),
 		inset 0 u(-2) u(2) rgba(0, 0, 0, 0.18),
+		0 0 0 u(1) rgba(0, 0, 0, 0.08),
 		0 u(1) u(1) rgba(0, 0, 0, 0.35),
-		0 u(5) u(6) rgba(0, 0, 0, 0.22),
-		u(3) u(14) u(18) rgba(0, 0, 0, 0.15);
+		0 u(4) u(5) rgba(0, 0, 0, 0.2),
+		u(3) u(12) u(16) rgba(0, 0, 0, 0.16),
+		u(6) u(24) u(32) rgba(0, 0, 0, 0.08);
 
 	&.pressed {
 		transform: translate(-50%, calc(-50% + var(--u) * 2));
@@ -323,9 +334,11 @@
 	border-radius: 50%;
 	background: #d9d5d4;
 	box-shadow:
+		0 0 0 u(1) rgba(0, 0, 0, 0.12),
 		0 u(2) u(2) rgba(0, 0, 0, 0.35),
-		u(6) u(18) u(22) rgba(0, 0, 0, 0.35),
-		u(12) u(30) u(40) rgba(0, 0, 0, 0.18);
+		u(2) u(8) u(10) rgba(0, 0, 0, 0.22),
+		u(6) u(18) u(24) rgba(0, 0, 0, 0.2),
+		u(12) u(34) u(48) rgba(0, 0, 0, 0.12);
 	transition: transform 60ms ease-out, box-shadow 60ms ease-out;
 
 	&.pressed {

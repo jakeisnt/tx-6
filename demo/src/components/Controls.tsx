@@ -71,17 +71,17 @@ export function Knob({ event, tone, x, y }: Point & { event: TX6EqEvent, tone: '
 	)
 }
 
-/** Channel fader. The TX-6 sends 0 at the top of travel. */
+/** Channel fader. The TX-6 sends 127 at the top of travel. */
 export function Fader({ event, x, y }: Point & { event: TX6SliderEvent }) {
 	const device = useTX6Device()
 	const progress = useTX6Attribute(event).progress ?? 0
-	const value = Math.round((1 - progress) * 127)
-	const ref = useWheel(steps => sendControl(device, event, value - steps * 4))
+	const value = Math.round(progress * 127)
+	const ref = useWheel(steps => sendControl(device, event, value + steps * 4))
 
 	const valueAt = (element: HTMLElement, clientY: number) => {
 		const rect = element.getBoundingClientRect()
 		const offset = (clientY - rect.top) * FADER.height / rect.height
-		return (offset - FADER.travelTop) / (FADER.travelBottom - FADER.travelTop) * 127
+		return (FADER.travelBottom - offset) / (FADER.travelBottom - FADER.travelTop) * 127
 	}
 
 	const { pairingClass, pairOnPress } = usePairable(event)
@@ -106,11 +106,11 @@ export function Fader({ event, x, y }: Point & { event: TX6SliderEvent }) {
 			aria-orientation="vertical"
 			aria-valuemin={0}
 			aria-valuemax={127}
-			aria-valuenow={127 - value}
+			aria-valuenow={value}
 			className={cn(classes.fader, pairingClass)}
 			style={at(x, y)}
 			onPointerDown={onPointerDown}
-			onKeyDown={arrowKeys(step => sendControl(device, event, value - step * 4))}
+			onKeyDown={arrowKeys(step => sendControl(device, event, value + step * 4))}
 		>
 			<div className={classes.faderSlit} />
 			<div className={classes.faderThumb} style={{ top: `calc(${thumbY} * var(--u))` }} />

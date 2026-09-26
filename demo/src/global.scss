@@ -16,6 +16,12 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
+// A soft pool of light on the desk, falling off toward the edges
+body {
+	background:
+		radial-gradient(ellipse 70% 60% at 50% 45%, #fafafb 0%, #f1f1f2 55%, #e4e4e6 100%) fixed;
+}
+
 #root {
 	min-height: 100dvh;
 }

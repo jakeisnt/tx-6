@@ -114,8 +114,6 @@ export function resolveBinding(source: TX6Source, bindings?: TX6Bindings): TX6Ev
 export function decodeControlValue(event: TX6EventType, value: number): TX6Event | undefined {
 	switch(KIND_OF.get(event)) {
 	case 'slider':
-		// Sliders send 0 at the top of their travel
-		return { event, progress: 1 - value / 127, value } as TX6Event
 	case 'knob':
 		return { event, progress: value / 127, value } as TX6Event
 	case 'button':
