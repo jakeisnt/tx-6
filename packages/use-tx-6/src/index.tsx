@@ -1,8 +1,6 @@
+import { TX6, type TX6EventParameters, type TX6EventType } from '@ulnd/tx-6'
+import { webBluetooth } from '@ulnd/tx-6/web-bluetooth'
 import { createContext, type ReactNode, useCallback, useContext, useRef, useSyncExternalStore } from 'react'
-
-import type { TX6EventParameters, TX6EventType } from '../controls.js'
-import { webBluetooth } from '../transports/web-bluetooth.js'
-import { TX6 } from '../tx6.js'
 
 let defaultDevice: TX6 | undefined
 

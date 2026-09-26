@@ -1,6 +1,6 @@
+import { isTX6EventType, isTX6Source, type TX6, type TX6Bindings, type TX6EventType } from '@ulnd/tx-6'
+import { useTX6Device } from '@ulnd/use-tx-6'
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
-import { isTX6EventType, isTX6Source, type TX6, type TX6Bindings, type TX6EventType } from 'use-tx-6'
-import { useTX6Device } from 'use-tx-6/react'
 
 const STORAGE_KEY = 'tx6.bindings'
 

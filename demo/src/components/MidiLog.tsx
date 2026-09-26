@@ -1,6 +1,6 @@
+import { type MidiMessage, TX6_EVENT_TYPES, type TX6Event, type TX6EventType, type TX6MessageOrigin, type TX6Source } from '@ulnd/tx-6'
+import { useTX6, useTX6Device } from '@ulnd/use-tx-6'
 import { useEffect, useRef, useState } from 'react'
-import { type MidiMessage, TX6_EVENT_TYPES, type TX6Event, type TX6EventType, type TX6MessageOrigin, type TX6Source } from 'use-tx-6'
-import { useTX6, useTX6Device } from 'use-tx-6/react'
 
 import { cn } from '../lib/cn.ts'
 import { usePairing } from '../lib/pairing.tsx'

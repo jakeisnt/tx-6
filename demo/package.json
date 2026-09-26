@@ -2,7 +2,7 @@
   "name": "use-tx-6-demo",
   "version": "0.1.0",
   "private": true,
-  "description": "Browser remote for the teenage engineering TX-6, built on use-tx-6",
+  "description": "Browser remote for the teenage engineering TX-6, built on @ulnd/tx-6",
   "type": "module",
   "homepage": "https://tx-6.jake.kitchen",
   "scripts": {

@@ -1,15 +1,15 @@
 import { afterAll, beforeAll, expect, test } from 'bun:test'
 import { GlobalRegistrator } from '@happy-dom/global-registrator'
 
-import { TX6 } from '../src/index.ts'
-import { fakeTransport } from './fakes.ts'
+import { TX6 } from '@ulnd/tx-6'
+import { fakeTransport } from '../../tx-6/test/fakes.ts'
 
 // react-dom checks for a DOM when it's first imported, so load it after registering one
 GlobalRegistrator.register()
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 const { act } = await import('react')
 const { createRoot } = await import('react-dom/client')
-const { TX6Provider, useTX6, useTX6Attribute, useTX6Attributes } = await import('../src/react/index.tsx')
+const { TX6Provider, useTX6, useTX6Attribute, useTX6Attributes } = await import('../src/index.tsx')
 
 declare global {
 	var IS_REACT_ACT_ENVIRONMENT: boolean

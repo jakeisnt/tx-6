@@ -14,10 +14,10 @@
 		"types": ["vite/client", "node"],
 		"noEmit": true,
 		"paths": {
-			"use-tx-6": ["../src/index.ts"],
-			"use-tx-6/react": ["../src/react/index.tsx"],
-			"use-tx-6/web-bluetooth": ["../src/transports/web-bluetooth.ts"],
-			"use-tx-6/web-midi": ["../src/transports/web-midi.ts"]
+			"@ulnd/tx-6": ["../packages/tx-6/src/index.ts"],
+			"@ulnd/tx-6/web-bluetooth": ["../packages/tx-6/src/transports/web-bluetooth.ts"],
+			"@ulnd/tx-6/web-midi": ["../packages/tx-6/src/transports/web-midi.ts"],
+			"@ulnd/use-tx-6": ["../packages/use-tx-6/src/index.tsx"]
 		}
 	},
 	"include": ["src", "vite.config.ts"]

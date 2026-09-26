@@ -1,6 +1,6 @@
+import type { TX6ButtonEvent, TX6EqEvent, TX6EventType, TX6SliderEvent } from '@ulnd/tx-6'
+import { useTX6Attribute, useTX6Device } from '@ulnd/use-tx-6'
 import { type CSSProperties, type KeyboardEvent, type PointerEvent, useEffect, useRef, useState } from 'react'
-import type { TX6ButtonEvent, TX6EqEvent, TX6EventType, TX6SliderEvent } from 'use-tx-6'
-import { useTX6Attribute, useTX6Device } from 'use-tx-6/react'
 
 import { cn } from '../lib/cn.ts'
 import { startDrag } from '../lib/drag.ts'

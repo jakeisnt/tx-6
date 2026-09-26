@@ -1,13 +1,19 @@
-# useTX6
-A set of React hooks for interacting with teenage engineering TX-6 over BLE MIDI
+# tx-6
+Drive the teenage engineering TX-6 from JavaScript over MIDI. Two packages:
+
+| package | what it is |
+| --- | --- |
+| [`@ulnd/tx-6`](packages/tx-6) | Headless driver. Decodes the TX-6's controls in any JavaScript runtime (browsers, Node, Bun, Deno, workers). No DOM or React. Ships Web Bluetooth and Web MIDI transports, and takes any transport you write. |
+| [`@ulnd/use-tx-6`](packages/use-tx-6) | React hooks on top of `@ulnd/tx-6`. |
 
 ## Installation
 ```
-yarn add use-tx-6
+npm install @ulnd/tx-6                  # headless
+npm install @ulnd/tx-6 @ulnd/use-tx-6   # React
 ```
 
 ## Putting the TX-6 in MIDI mode
-`use-tx-6` reads the MIDI CC messages the TX-6 sends when **ctrl out** (controller mode) is on. That setting is off by default, so turn it on first:
+`@ulnd/tx-6` reads the MIDI CC messages the TX-6 sends when **ctrl out** (controller mode) is on. That setting is off by default, so turn it on first:
 
 1. Open the **system menu** and go to **midi**.
 2. Turn the select encoder to find **CTRL** and tap select until it reads **OUT**.
@@ -20,14 +26,41 @@ To connect over **USB**, plug in a USB-C cable and use the `webMidi()` transport
 See [docs/midi.md](docs/midi.md) for the full MIDI reference: every outgoing and incoming CC, notes, program changes, local control and the POTS/CC menu.
 
 ## Usage
+### Headless
+```ts
+import { TX6 } from '@ulnd/tx-6'
+import { webMidi } from '@ulnd/tx-6/web-midi'
+
+const tx6 = new TX6({ transport: webMidi() })
+tx6.on('input1.slider', ({ progress }) => console.log('fader 1', progress))
+tx6.on('event', ({ event, ...params }) => console.log(event, params))
+
+await tx6.connect()
+```
+
+The transports only use the Web Bluetooth or Web MIDI API they're given, so they also run outside a browser. Pass in any implementation of those APIs:
+
+```ts
+// Node: USB MIDI, or a TX-6 paired over Bluetooth in your OS, via a Web MIDI implementation such as `web-midi-api`
+import { requestMIDIAccess } from 'web-midi-api'
+const tx6 = new TX6({ transport: webMidi({ access: () => requestMIDIAccess() }) })
+
+// Node: BLE MIDI via a Web Bluetooth implementation such as `webbluetooth`
+import { bluetooth } from 'webbluetooth'
+const tx6 = new TX6({ transport: webBluetooth({ bluetooth }) })
+```
+
+For anything else (a WebSocket bridge, a recording, a native MIDI library), implement `TX6Transport` and hand the transport raw MIDI bytes, or call `tx6.receive(bytes)` yourself.
+
+### React
 The following demo will let you adjust the font size of the text using the slider for channel 1:
 ```tsx
-import useTX6, { useTX6Attribute } from 'use-tx-6'
+import useTX6, { useTX6Attribute } from '@ulnd/use-tx-6'
 
 export default function App() {
   const { connect, status, error } = useTX6()
 
-  const { progress } = useTX6Attribute('input1.slider')
+  const { progress = 0 } = useTX6Attribute('input1.slider')
 
   switch(status) {
   case 'disconnected':
@@ -51,6 +84,17 @@ export default function App() {
 }
 ```
 
+The hooks use Web Bluetooth by default. To use another transport, or share a device with non-React code, wrap your app in a provider:
+```tsx
+import { TX6 } from '@ulnd/tx-6'
+import { webMidi } from '@ulnd/tx-6/web-midi'
+import { TX6Provider } from '@ulnd/use-tx-6'
+
+const device = new TX6({ transport: webMidi() })
+
+<TX6Provider device={device}><App /></TX6Provider>
+```
+
 If you want to access multiple attributes at the same time, use `useTX6Attributes`—this is useful for the EQ knobs:
 ```tsx
 const [{ progress: eq1 }, { progress: eq2 }, { progress: eq3 }] = useTX6Attributes(['input1.eq1', 'input1.eq2', 'input1.eq3'])
@@ -67,6 +111,20 @@ tx6.unbind('note:40')        // back to the default map
 // Every message, and what it decoded to; raw BLE-MIDI packets arrive on 'packet'
 tx6.on('message', (message, { origin, source, event }) => console.log(source, event))
 ```
+
+## Development
+This is a Bun workspace: `packages/tx-6`, `packages/use-tx-6` and `demo`.
+
+```
+bun install
+bun run check   # lint, typecheck, test, build, and a smoke test of the builds in plain Node
+bun run pack    # build both packages into packed/*.tgz, as they'd be published
+```
+
+### Releasing
+Bump `version` in both `packages/*/package.json` (keep them in step: `@ulnd/use-tx-6` peers on `^` the same version of `@ulnd/tx-6`), then push a `v<version>` tag. The [release workflow](.github/workflows/release.yml) checks, packs and publishes both packages to npm with provenance.
+
+The workflow publishes with npm [trusted publishing](https://docs.npmjs.com/trusted-publishers) when it's configured for both packages, or else with an `NPM_TOKEN` repository secret. Trusted publishing can only be set up for a package that already exists, so the first release needs the token (or a manual `npm publish packed/<file>.tgz --access public`).
 
 ## Demo
 The demo shows a raw log of every BLE-MIDI packet and the messages parsed from it. **pair controls** lets you click a control on the drawing and then move it on the TX-6 to pair them. Pairings are saved in the browser.
