@@ -6,6 +6,13 @@ Drive the teenage engineering TX-6 from JavaScript over MIDI. Two packages:
 | [`@ulnd/tx-6`](packages/tx-6) | Headless driver. Decodes the TX-6's controls in any JavaScript runtime (browsers, Node, Bun, Deno, workers). No DOM or React. Ships Web Bluetooth and Web MIDI transports, and takes any transport you write. |
 | [`@ulnd/use-tx-6`](packages/use-tx-6) | React hooks on top of `@ulnd/tx-6`. |
 
+## References
+
+- AI slop app that we can beat: https://tswitcher.app/
+- TP-7 MIDI mapping that we can reverse-engineer: https://lucidyan.github.io/tp7-midi/, via https://github.com/lucidyan/tp7-midi
+- `use-tx-6`: original framework that jump-started this. https://github.com/darnfish/use-tx-6
+- Other resources: https://github.com/bnjreece/awesome-te?utm_source=chatgpt.com
+
 ## Installation
 ```
 npm install @ulnd/tx-6                  # headless
