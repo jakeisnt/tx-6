@@ -27,6 +27,13 @@ Every device has the same API. Swap `TX6` for `TP7` or `OP1`, and `useTX6…` fo
 
 > **Only the TX-6 map is verified on hardware.** The TP-7 and OP-1 field maps are best-effort guesses, and every unconfirmed number is marked in the code and docs. Until they're confirmed, pair controls with `device.bind(source, control)` or use pairing mode on the sites. Corrections are welcome.
 
+## References
+
+- AI slop app that we can beat: https://tswitcher.app/
+- TP-7 MIDI mapping that we can reverse-engineer: https://lucidyan.github.io/tp7-midi/, via https://github.com/lucidyan/tp7-midi
+- `use-tx-6`: original framework that jump-started this. https://github.com/darnfish/use-tx-6
+- Other resources: https://github.com/bnjreece/awesome-te?utm_source=chatgpt.com
+
 ## How it fits together
 ```
 packages/
