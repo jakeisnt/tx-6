@@ -1,4 +1,4 @@
-import type { ControlSource, MessageOrigin, MidiMessage } from '@ulnd/te-device'
+import type { ControlSource, MessageOrigin, MidiMessage } from '@ulnd/teenage'
 import { useEffect, useRef, useState } from 'react'
 
 import { type AnyDevice, useConnection, useDevice } from '../device.ts'

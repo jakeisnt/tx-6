@@ -9,5 +9,5 @@
 	},
 	// Also the project the published packages' declarations are generated from, so
 	// they can inline the private shared cores
-	"include": ["*/src", "*/*/src"]
+	"include": ["*/src"]
 }

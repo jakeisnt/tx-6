@@ -1,7 +1,6 @@
 import { DeviceSite, loadBindings } from '@ulnd/te-site-kit'
-import { TP7, tp7 } from '@ulnd/tp-7'
-import { webBluetooth } from '@ulnd/tp-7/web-bluetooth'
-import { TP7Provider } from '@ulnd/use-tp-7'
+import { TP7, tp7Profile } from '@ulnd/teenage'
+import { webBluetooth } from '@ulnd/teenage/web-bluetooth'
 import { useMemo } from 'react'
 
 import Device from './Device.tsx'
@@ -28,13 +27,11 @@ function Setup() {
 }
 
 export default function App() {
-	const device = useMemo(() => new TP7({ transport: webBluetooth(), bindings: loadBindings(tp7) }), [])
+	const device = useMemo(() => new TP7({ transport: webBluetooth(tp7Profile), bindings: loadBindings(tp7Profile) }), [])
 
 	return (
-		<TP7Provider device={device}>
-			<DeviceSite site="tp-7" device={device} setup={<Setup />}>
-				<Device />
-			</DeviceSite>
-		</TP7Provider>
+		<DeviceSite site="tp-7" device={device} setup={<Setup />}>
+			<Device />
+		</DeviceSite>
 	)
 }

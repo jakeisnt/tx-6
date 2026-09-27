@@ -1,14 +1,10 @@
-import type { ControlKinds, TEDevice } from '@ulnd/te-device'
-import { createDeviceHooks } from '@ulnd/use-te-device'
+import type { ControlKinds, TEDevice } from '@ulnd/teenage'
+import { useDevice as useAnyDevice } from '@ulnd/teenage/react'
 
-/** Any teenage engineering device. The kit's components work with every one. */
+/** Any teenage engineering device, with its full profile. The kit's components work with every one. */
 export type AnyDevice = TEDevice<ControlKinds>
 
-const hooks = createDeviceHooks<ControlKinds, AnyDevice>(() => {
-	throw new Error('Render the kit components inside <DeviceSite>')
-})
+/** The site's device, from the {@link DeviceSite}'s provider. */
+export const useDevice = (): AnyDevice => useAnyDevice<AnyDevice>()
 
-export const DeviceProvider = hooks.Provider
-export const useDevice = hooks.useDevice
-export const useConnection = hooks.useConnection
-export const useControl = hooks.useAttribute
+export { useConnection, useControl, useDeviceEvent } from '@ulnd/teenage/react'

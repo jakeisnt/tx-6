@@ -1,7 +1,6 @@
 import { DeviceSite, loadBindings } from '@ulnd/te-site-kit'
-import { TX6, tx6 } from '@ulnd/tx-6'
-import { webBluetooth } from '@ulnd/tx-6/web-bluetooth'
-import { TX6Provider } from '@ulnd/use-tx-6'
+import { TX6, tx6Profile } from '@ulnd/teenage'
+import { webBluetooth } from '@ulnd/teenage/web-bluetooth'
 import { useMemo } from 'react'
 
 import Device from './components/Device.tsx'
@@ -29,14 +28,11 @@ function Setup() {
 }
 
 export default function App() {
-	const device = useMemo(() => new TX6({ transport: webBluetooth(), bindings: loadBindings(tx6) }), [])
+	const device = useMemo(() => new TX6({ transport: webBluetooth(tx6Profile), bindings: loadBindings(tx6Profile) }), [])
 
 	return (
-		// The drawing uses the TX-6 hooks; the site chrome uses the kit's
-		<TX6Provider device={device}>
-			<DeviceSite site="tx-6" device={device} setup={<Setup />}>
-				<Device />
-			</DeviceSite>
-		</TX6Provider>
+		<DeviceSite site="tx-6" device={device} setup={<Setup />}>
+			<Device />
+		</DeviceSite>
 	)
 }

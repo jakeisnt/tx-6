@@ -1,6 +1,6 @@
 export { default as DeviceSite } from './components/DeviceSite.tsx'
 export { Dial, Key } from './components/Panel.tsx'
-export { type AnyDevice, useConnection, useControl, useDevice } from './device.ts'
+export { type AnyDevice, useConnection, useControl, useDevice, useDeviceEvent } from './device.ts'
 export { cn } from './lib/cn.ts'
 export { sendControl, tapControl, turnControl } from './lib/controls.ts'
 export { describeEvent } from './lib/describe.ts'

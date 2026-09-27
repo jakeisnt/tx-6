@@ -1,12 +1,13 @@
 import { Dial, describeEvent, Key, useConnection } from '@ulnd/te-site-kit'
-import { useTP7Device } from '@ulnd/use-tp-7'
+import type { TP7 } from '@ulnd/teenage'
+import { useDevice } from '@ulnd/teenage/react'
 import { useEffect, useState } from 'react'
 
 import classes from './device.module.scss'
 
 /** The TP-7, simplified: the reel, the three side buttons and the transport. Every control is live. */
 export default function Device() {
-	const device = useTP7Device()
+	const device = useDevice<TP7>()
 	const { status } = useConnection()
 	const [last, setLast] = useState<string>()
 

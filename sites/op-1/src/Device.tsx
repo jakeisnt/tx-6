@@ -1,5 +1,6 @@
 import { Dial, describeEvent, Key, useConnection } from '@ulnd/te-site-kit'
-import { useOP1Device } from '@ulnd/use-op-1'
+import type { OP1 } from '@ulnd/teenage'
+import { useDevice } from '@ulnd/teenage/react'
 import { useEffect, useState } from 'react'
 
 import classes from './device.module.scss'
@@ -14,7 +15,7 @@ const ENCODERS = [
 
 /** The OP-1 field, simplified: encoders, function keys and the keyboard. Every control is live. */
 export default function Device() {
-	const device = useOP1Device()
+	const device = useDevice<OP1>()
 	const { status } = useConnection()
 	const [last, setLast] = useState<string>()
 

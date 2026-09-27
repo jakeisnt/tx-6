@@ -1,17 +1,14 @@
 {
-  "name": "@ulnd/use-te-device",
+  "name": "@ulnd/tx-6",
   "version": "0.1.0",
   "private": true,
-  "description": "React hooks for any teenage engineering device. Not published: @ulnd/teenage/react bundles it.",
+  "description": "The teenage engineering TX-6 mixer: its control map and device class. Not published: @ulnd/teenage bundles it.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.tsx",
+    ".": "./src/index.ts",
     "./package.json": "./package.json"
-  },
-  "peerDependencies": {
-    "react": ">=18"
   },
   "devDependencies": {
     "@ulnd/te-device": "workspace:*"

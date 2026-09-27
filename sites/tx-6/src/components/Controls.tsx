@@ -8,8 +8,8 @@ import {
 	usePairable as useKitPairable,
 	useWheel
 } from '@ulnd/te-site-kit'
-import type { TX6ButtonEvent, TX6EqEvent, TX6EventType, TX6SliderEvent } from '@ulnd/tx-6'
-import { useTX6Attribute, useTX6Device } from '@ulnd/use-tx-6'
+import type { TX6, TX6ButtonEvent, TX6EqEvent, TX6EventType, TX6SliderEvent } from '@ulnd/teenage'
+import { useControl, useDevice } from '@ulnd/teenage/react'
 import type { CSSProperties, PointerEvent } from 'react'
 
 import { at, FADER } from '../lib/geometry.ts'
@@ -27,9 +27,9 @@ function usePairable(event: TX6EventType) {
 
 /** EQ knob. Drag vertically, scroll, or use the arrow keys. */
 export function Knob({ event, tone, x, y }: Point & { event: TX6EqEvent, tone: 'dark' | 'orange' | 'cream' }) {
-	const device = useTX6Device()
+	const device = useDevice<TX6>()
 	// Knobs sit at 12 o'clock until the device reports otherwise
-	const value = useTX6Attribute(event).value ?? 64
+	const value = useControl<TX6>(event).value ?? 64
 	const ref = useWheel(steps => sendControl(device, event, value + steps * 4))
 	const { pairingClass, pairOnPress } = usePairable(event)
 
@@ -64,8 +64,8 @@ export function Knob({ event, tone, x, y }: Point & { event: TX6EqEvent, tone: '
 
 /** Channel fader. The TX-6 sends 127 at the top of travel. */
 export function Fader({ event, x, y }: Point & { event: TX6SliderEvent }) {
-	const device = useTX6Device()
-	const progress = useTX6Attribute(event).progress ?? 0
+	const device = useDevice<TX6>()
+	const progress = useControl<TX6>(event).progress ?? 0
 	const value = Math.round(progress * 127)
 	const ref = useWheel(steps => sendControl(device, event, value + steps * 4))
 
@@ -148,7 +148,7 @@ export function ShiftButton({ x, y }: Point) {
 
 /** Select encoder: drag around it or scroll to turn, click or press Enter to push. */
 export function Encoder({ x, y }: Point) {
-	const pressed = useTX6Attribute('select.button').pressed ?? false
+	const pressed = useControl<TX6>('select.button').pressed ?? false
 	// The push switch can be paired from the log panel's control list
 	const { ref, angle, pairing, onPointerDown, onKeyDown } = useEncoder('select.encoder', { push: 'select.button', detent: 18 })
 

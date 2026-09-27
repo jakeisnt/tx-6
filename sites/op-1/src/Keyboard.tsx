@@ -1,5 +1,6 @@
 import { cn, startDrag } from '@ulnd/te-site-kit'
-import { useOP1Device } from '@ulnd/use-op-1'
+import type { OP1 } from '@ulnd/teenage'
+import { useDevice } from '@ulnd/teenage/react'
 import { type PointerEvent, useEffect, useState } from 'react'
 
 import classes from './device.module.scss'
@@ -12,7 +13,7 @@ const KEYS = Array.from({ length: 24 }, (_, index) => LOWEST + index)
 const isBlack = (note: number) => [1, 3, 6, 8, 10].includes(note % 12)
 
 function useHeldNotes() {
-	const device = useOP1Device()
+	const device = useDevice<OP1>()
 	const [held, setHeld] = useState<ReadonlySet<number>>(new Set())
 
 	useEffect(() => device.on('message', ({ status, data }) => {
@@ -35,7 +36,7 @@ function useHeldNotes() {
 }
 
 export default function Keyboard() {
-	const device = useOP1Device()
+	const device = useDevice<OP1>()
 	const held = useHeldNotes()
 
 	const play = (note: number) => (start: PointerEvent) => {

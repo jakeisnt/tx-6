@@ -1,8 +1,9 @@
-import { webBluetooth } from '@ulnd/te-device/web-bluetooth'
-import { webMidi } from '@ulnd/te-device/web-midi'
+import { DeviceProvider } from '@ulnd/teenage/react'
+import { webBluetooth } from '@ulnd/teenage/web-bluetooth'
+import { webMidi } from '@ulnd/teenage/web-midi'
 import { type ReactNode, useEffect, useState } from 'react'
 
-import { type AnyDevice, DeviceProvider, useConnection, useDevice } from '../device.ts'
+import { type AnyDevice, useConnection, useDevice, useDeviceEvent } from '../device.ts'
 import { cn } from '../lib/cn.ts'
 import { describeEvent } from '../lib/describe.ts'
 import { PairingProvider, persistBindings } from '../lib/pairing.tsx'
@@ -30,7 +31,7 @@ function Toolbar({ setup }: { setup: ReactNode }) {
 	const [last, setLast] = useState<string>()
 	const { name } = device.profile
 
-	useEffect(() => device.on('event', event => setLast(describeEvent(event))), [device])
+	useDeviceEvent('event', event => setLast(describeEvent(event)), device)
 
 	const connect = (transport: 'bluetooth' | 'midi') => {
 		// Failures land in `error`

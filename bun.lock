@@ -10,12 +10,7 @@
         "@types/bun": "^1.4.2",
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
-        "@ulnd/op-1": "workspace:*",
-        "@ulnd/tp-7": "workspace:*",
-        "@ulnd/tx-6": "workspace:*",
-        "@ulnd/use-op-1": "workspace:*",
-        "@ulnd/use-tp-7": "workspace:*",
-        "@ulnd/use-tx-6": "workspace:*",
+        "@ulnd/teenage": "workspace:*",
         "react": "^19.3.0",
         "react-dom": "^19.3.0",
         "tsdown": "^0.23.0",
@@ -23,65 +18,39 @@
         "wrangler": "^4.141.0",
       },
     },
-    "packages/op-1/core": {
+    "packages/op-1": {
       "name": "@ulnd/op-1",
       "version": "0.1.0",
       "devDependencies": {
         "@ulnd/te-device": "workspace:*",
       },
     },
-    "packages/op-1/react": {
-      "name": "@ulnd/use-op-1",
-      "version": "0.1.0",
-      "devDependencies": {
-        "@ulnd/op-1": "workspace:*",
-        "@ulnd/use-te-device": "workspace:*",
-      },
-      "peerDependencies": {
-        "@ulnd/op-1": "workspace:^",
-        "react": ">=18",
-      },
-    },
     "packages/te-device": {
       "name": "@ulnd/te-device",
       "version": "0.1.0",
     },
-    "packages/tp-7/core": {
+    "packages/teenage": {
+      "name": "@ulnd/teenage",
+      "version": "0.1.0",
+      "peerDependencies": {
+        "react": ">=18",
+      },
+      "optionalPeers": [
+        "react",
+      ],
+    },
+    "packages/tp-7": {
       "name": "@ulnd/tp-7",
       "version": "0.1.0",
       "devDependencies": {
         "@ulnd/te-device": "workspace:*",
       },
     },
-    "packages/tp-7/react": {
-      "name": "@ulnd/use-tp-7",
-      "version": "0.1.0",
-      "devDependencies": {
-        "@ulnd/tp-7": "workspace:*",
-        "@ulnd/use-te-device": "workspace:*",
-      },
-      "peerDependencies": {
-        "@ulnd/tp-7": "workspace:^",
-        "react": ">=18",
-      },
-    },
-    "packages/tx-6/core": {
+    "packages/tx-6": {
       "name": "@ulnd/tx-6",
       "version": "0.1.0",
       "devDependencies": {
         "@ulnd/te-device": "workspace:*",
-      },
-    },
-    "packages/tx-6/react": {
-      "name": "@ulnd/use-tx-6",
-      "version": "0.1.0",
-      "devDependencies": {
-        "@ulnd/tx-6": "workspace:*",
-        "@ulnd/use-te-device": "workspace:*",
-      },
-      "peerDependencies": {
-        "@ulnd/tx-6": "workspace:^",
-        "react": ">=18",
       },
     },
     "packages/use-te-device": {
@@ -105,9 +74,8 @@
         "@types/node": "^26.6.3",
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
-        "@ulnd/op-1": "workspace:*",
         "@ulnd/te-site-kit": "workspace:*",
-        "@ulnd/use-op-1": "workspace:*",
+        "@ulnd/teenage": "workspace:*",
         "@vitejs/plugin-react": "^6.1.1",
         "sass": "^1.105.0",
         "typescript": "^7.0.2",
@@ -126,8 +94,7 @@
         "@types/node": "^26.6.3",
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
-        "@ulnd/te-device": "workspace:*",
-        "@ulnd/use-te-device": "workspace:*",
+        "@ulnd/teenage": "workspace:*",
         "typescript": "^7.0.2",
       },
       "peerDependencies": {
@@ -146,8 +113,7 @@
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
         "@ulnd/te-site-kit": "workspace:*",
-        "@ulnd/tp-7": "workspace:*",
-        "@ulnd/use-tp-7": "workspace:*",
+        "@ulnd/teenage": "workspace:*",
         "@vitejs/plugin-react": "^6.1.1",
         "sass": "^1.105.0",
         "typescript": "^7.0.2",
@@ -167,8 +133,7 @@
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
         "@ulnd/te-site-kit": "workspace:*",
-        "@ulnd/tx-6": "workspace:*",
-        "@ulnd/use-tx-6": "workspace:*",
+        "@ulnd/teenage": "workspace:*",
         "@vitejs/plugin-react": "^6.1.1",
         "sass": "^1.105.0",
         "typescript": "^7.0.2",
@@ -452,7 +417,7 @@
 
     "@typescript/typescript-win32-x64": ["@typescript/typescript-win32-x64@7.0.2", "", { "os": "win32", "cpu": "x64" }, "sha512-0BQ3HkAHHlKLSp1qRvf3SUhGpGsDuhB/jgFw75guyqbxJqEaS0Cw/VFO8i2nHglJUzQCRtMMR/IBAKE3ETMC4g=="],
 
-    "@ulnd/op-1": ["@ulnd/op-1@workspace:packages/op-1/core"],
+    "@ulnd/op-1": ["@ulnd/op-1@workspace:packages/op-1"],
 
     "@ulnd/site-op-1": ["@ulnd/site-op-1@workspace:sites/op-1"],
 
@@ -464,17 +429,13 @@
 
     "@ulnd/te-site-kit": ["@ulnd/te-site-kit@workspace:sites/te-site-kit"],
 
-    "@ulnd/tp-7": ["@ulnd/tp-7@workspace:packages/tp-7/core"],
+    "@ulnd/teenage": ["@ulnd/teenage@workspace:packages/teenage"],
 
-    "@ulnd/tx-6": ["@ulnd/tx-6@workspace:packages/tx-6/core"],
+    "@ulnd/tp-7": ["@ulnd/tp-7@workspace:packages/tp-7"],
 
-    "@ulnd/use-op-1": ["@ulnd/use-op-1@workspace:packages/op-1/react"],
+    "@ulnd/tx-6": ["@ulnd/tx-6@workspace:packages/tx-6"],
 
     "@ulnd/use-te-device": ["@ulnd/use-te-device@workspace:packages/use-te-device"],
-
-    "@ulnd/use-tp-7": ["@ulnd/use-tp-7@workspace:packages/tp-7/react"],
-
-    "@ulnd/use-tx-6": ["@ulnd/use-tx-6@workspace:packages/tx-6/react"],
 
     "@vitejs/plugin-react": ["@vitejs/plugin-react@6.1.1", "", { "dependencies": { "@rolldown/pluginutils": "^1.0.1" }, "peerDependencies": { "@rolldown/plugin-babel": "^0.1.7 || ^0.2.0", "babel-plugin-react-compiler": "^1.0.0", "oxc-transform-react": "^0.145.0", "vite": "^8.0.0" }, "optionalPeers": ["@rolldown/plugin-babel", "babel-plugin-react-compiler", "oxc-transform-react"] }, "sha512-yxLaQV9gkhS8ezJqCM6+ndU7mDY6gqAg75NQ+0IjwEI8IYOmQCgkRwHKVSfWXW076DsqMo0Dk+0FK1U+M5RgFw=="],
 

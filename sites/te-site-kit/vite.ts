@@ -13,11 +13,12 @@ const aliases = [
 	{ find: /^@ulnd\/te-device$/, replacement: source('packages/te-device/src/index.ts') },
 	{ find: /^@ulnd\/te-device\/(web-bluetooth|web-midi)$/, replacement: source('packages/te-device/src/transports/$1.ts') },
 	{ find: /^@ulnd\/use-te-device$/, replacement: source('packages/use-te-device/src/index.tsx') },
+	{ find: /^@ulnd\/teenage$/, replacement: source('packages/teenage/src/index.ts') },
+	{ find: /^@ulnd\/teenage\/(web-bluetooth|web-midi|react)$/, replacement: source('packages/teenage/src/$1.ts') },
 	{ find: /^@ulnd\/te-site-kit$/, replacement: source('sites/te-site-kit/src/index.ts') },
 	...SITES.flatMap(({ id }) => [
-		{ find: new RegExp(`^@ulnd/${id}$`), replacement: source(`packages/${id}/core/src/index.ts`) },
-		{ find: new RegExp(`^@ulnd/${id}/(web-bluetooth|web-midi)$`), replacement: source(`packages/${id}/core/src/transports/$1.ts`) },
-		{ find: new RegExp(`^@ulnd/use-${id}$`), replacement: source(`packages/${id}/react/src/index.ts`) }
+		{ find: new RegExp(`^@ulnd/${id}$`), replacement: source(`packages/${id}/src/index.ts`) },
+		{ find: new RegExp(`^@ulnd/${id}/(web-bluetooth|web-midi)$`), replacement: source(`packages/${id}/src/transports/$1.ts`) }
 	])
 ]
 

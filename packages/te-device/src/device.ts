@@ -66,6 +66,11 @@ export type TEDeviceEvents<K extends ControlKinds> =
 export class TEDevice<K extends ControlKinds> {
 	/** The device this instance drives: its name and control map. */
 	readonly profile: DeviceProfile<K>
+	/**
+	 * Type-only, never set at runtime: the device's controls and their kinds, so
+	 * code that receives any device (such as the React hooks) can infer them.
+	 */
+	declare readonly '~controls': K
 	// Loosely typed inside: for a generic device, TypeScript can't rule out a control
 	// named like a built-in event. defineDevice() rejects those at runtime.
 	readonly #emitter = new Emitter<Record<string, unknown[]>>()

@@ -1,10 +1,10 @@
 # TX-6 MIDI reference
 
-These notes cover everything `@ulnd/tx-6` ([`packages/tx-6/core`](../packages/tx-6/core)) needs from the TX-6's MIDI features. They summarise the MIDI sections of teenage engineering's [TX-6 guide](https://teenage.engineering/guides/tx-6) (midi, midi CC, ble and the midi reference). Check the official guide for the latest firmware behaviour.
+These notes cover everything `@ulnd/teenage` ([`packages/tx-6`](../packages/tx-6)) needs from the TX-6's MIDI features. They summarise the MIDI sections of teenage engineering's [TX-6 guide](https://teenage.engineering/guides/tx-6) (midi, midi CC, ble and the midi reference). Check the official guide for the latest firmware behaviour.
 
 ## Putting the TX-6 in MIDI mode
 
-`@ulnd/tx-6` listens for the Control Change messages that the TX-6 sends when **ctrl out** is on. The TX-6 calls this *controller mode*. MIDI goes out over USB and Bluetooth LE (BLE).
+`@ulnd/teenage` listens for the Control Change messages that the TX-6 sends when **ctrl out** is on. The TX-6 calls this *controller mode*. MIDI goes out over USB and Bluetooth LE (BLE).
 
 1. Open the **system menu** and go to **midi**.
 2. Turn the select encoder to pick a setting, and tap select to change it.
@@ -21,20 +21,20 @@ Bluetooth is **off by default**.
 2. Pick **ACCEPT** (device mode). BLE is now on and the TX-6 accepts connections from BLE MIDI hosts such as a browser or computer.
 3. In the demo or your app, click **connect bluetooth** and choose the TX-6 in the browser's pairing dialog. Web Bluetooth needs Chrome or Edge.
 
-The **SCAN** (host) setting is for the opposite setup. In SCAN the TX-6 looks for BLE MIDI devices and connects to the one with the strongest signal. Don't use it with `@ulnd/tx-6`.
+The **SCAN** (host) setting is for the opposite setup. In SCAN the TX-6 looks for BLE MIDI devices and connects to the one with the strongest signal. Don't use it with `@ulnd/teenage`.
 
 If several TX-6 units are nearby, rename yours with **name** in the system menu. Turn the encoder to pick each letter and press select to move to the next one. The name you set is what the TX-6 advertises over BLE.
 
 ### Over USB
 
-Connect the TX-6 with a USB-C cable and use the `webMidi()` transport (the **midi** button in the demo). This transport also works with a TX-6 that you've paired over Bluetooth in your operating system's MIDI settings.
+Connect the TX-6 with a USB-C cable and use the `webMidi(tx6Profile)` transport (the **midi** button in the demo). This transport also works with a TX-6 that you've paired over Bluetooth in your operating system's MIDI settings.
 
 ## midi menu settings
 
 | setting | effect |
 |---|---|
 | ctrl in | Accepts incoming MIDI CC and program change, so another device can control the TX-6. |
-| ctrl out | Sends MIDI CC whenever a knob or fader moves or a button is pressed. **`@ulnd/tx-6` needs this setting.** |
+| ctrl out | Sends MIDI CC whenever a knob or fader moves or a button is pressed. **`@ulnd/teenage` needs this setting.** |
 | note on | Accepts incoming MIDI notes, for playing the built-in synthesizer. |
 | ctrl off + note off | Turns off all incoming and outgoing MIDI. |
 
@@ -46,11 +46,11 @@ Tip: when another device controls the TX-6 over MIDI, you can turn off the TX-6'
 
 When the TX-6 is part of a larger setup, individual knobs can send MIDI CC to external gear. Set a knob's function to **CC** in the **POTS** menu, using the custom or per-track setting, and then set its channel and CC number in the **CC** menu. Each pot can have its own MIDI channel and CC. Only pots set to CC in the POTS menu send these messages.
 
-Knobs set to custom CCs don't send the CC numbers listed below, so `@ulnd/tx-6` won't recognise them.
+Knobs set to custom CCs don't send the CC numbers listed below, so `@ulnd/teenage` won't recognise them.
 
 ## Outgoing MIDI messages in controller mode
 
-These are the messages `@ulnd/tx-6` decodes (see [`packages/tx-6/src/controls.ts`](../packages/tx-6/src/controls.ts)).
+These are the messages `@ulnd/teenage` decodes (see [`packages/tx-6/src/controls.ts`](../packages/tx-6/src/controls.ts)).
 
 | control | cc | channel | range |
 |---|---|---|---|

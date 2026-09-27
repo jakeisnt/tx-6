@@ -1,7 +1,6 @@
-import { OP1, op1 } from '@ulnd/op-1'
-import { webBluetooth } from '@ulnd/op-1/web-bluetooth'
 import { DeviceSite, loadBindings } from '@ulnd/te-site-kit'
-import { OP1Provider } from '@ulnd/use-op-1'
+import { OP1, op1Profile } from '@ulnd/teenage'
+import { webBluetooth } from '@ulnd/teenage/web-bluetooth'
 import { useMemo } from 'react'
 
 import Device from './Device.tsx'
@@ -30,13 +29,11 @@ function Setup() {
 }
 
 export default function App() {
-	const device = useMemo(() => new OP1({ transport: webBluetooth(), bindings: loadBindings(op1) }), [])
+	const device = useMemo(() => new OP1({ transport: webBluetooth(op1Profile), bindings: loadBindings(op1Profile) }), [])
 
 	return (
-		<OP1Provider device={device}>
-			<DeviceSite site="op-1" device={device} setup={<Setup />}>
-				<Device />
-			</DeviceSite>
-		</OP1Provider>
+		<DeviceSite site="op-1" device={device} setup={<Setup />}>
+			<Device />
+		</DeviceSite>
 	)
 }

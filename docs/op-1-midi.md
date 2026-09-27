@@ -5,8 +5,8 @@
 Until the map is confirmed, pair controls yourself: use **pair controls** on the site, or call `op1.bind('cc:<n>', '<control>')` in code. Pairings take precedence over the defaults below, and the site saves them in your browser.
 
 ## Connecting
-- **USB:** connect the OP-1 field with a USB-C cable and use the `webMidi()` transport (the **midi** button on the site). The input is picked by name (`/op-?1/i`); pass `selectInput` to choose another.
-- **Bluetooth:** turn on Bluetooth MIDI on the OP-1 field and use `webBluetooth()` from Chrome or Edge. Or pair it with your operating system and use `webMidi()`.
+- **USB:** connect the OP-1 field with a USB-C cable and use the `webMidi(op1Profile)` transport (the **midi** button on the site). The input is picked by name (`/op-?1/i`); pass `selectInput` to choose another.
+- **Bluetooth:** turn on Bluetooth MIDI on the OP-1 field and use `webBluetooth(op1Profile)` from Chrome or Edge. Or pair it with your operating system and use `webMidi(op1Profile)`.
 
 Turn on the controller (CC) output and MIDI out in the OP-1 field's MIDI settings. See teenage engineering's [OP-1 field guide](https://teenage.engineering/guides/op-1-field) for where those settings are in the current firmware.
 
@@ -45,4 +45,4 @@ Buttons, pressed at 64 and above.
 ### Keyboard
 The keyboard sends Note On and Note Off. At the default octave the two octaves run from F (note 53) to E (note 76), and the octave keys shift that range. Notes aren't mapped to controls by default: they arrive on the `message` event, and the site lights them on its keyboard. Pair a note with `op1.bind('note:<n>', '<control>')` to use it as a button.
 
-The map lives in [`packages/op-1/core/src/controls.ts`](../packages/op-1/core/src/controls.ts).
+The map lives in [`packages/op-1/src/controls.ts`](../packages/op-1/src/controls.ts).

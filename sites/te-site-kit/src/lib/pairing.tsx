@@ -1,4 +1,4 @@
-import { type ControlBindings, type ControlKinds, type ControlName, type DeviceProfile, isControlSource } from '@ulnd/te-device'
+import { type ControlBindings, type ControlKinds, type ControlName, type DeviceProfile, isControlSource } from '@ulnd/teenage'
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 
 import { type AnyDevice, useDevice } from '../device.ts'

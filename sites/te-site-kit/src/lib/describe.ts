@@ -1,4 +1,4 @@
-import type { ControlEvent, ControlKinds } from '@ulnd/te-device'
+import type { ControlEvent, ControlKinds } from '@ulnd/teenage'
 
 /** A short readout for a control event, e.g. `input1.slider 0.50` or `reel -2`. */
 export function describeEvent(event: ControlEvent<ControlKinds>) {

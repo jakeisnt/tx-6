@@ -1,6 +1,6 @@
 import { type KeyboardEvent, type PointerEvent, useEffect, useRef, useState } from 'react'
 
-import { useControl, useDevice } from '../device.ts'
+import { useControl, useDevice, useDeviceEvent } from '../device.ts'
 import { sendControl, tapControl, turnControl } from './controls.ts'
 import { startDrag } from './drag.ts'
 import { usePairing } from './pairing.tsx'
@@ -70,7 +70,7 @@ export function useWheel(onSteps: (steps: number) => void) {
 /** A momentary button: pressed while the pointer or key is held down. */
 export function useMomentary(control: string) {
 	const device = useDevice()
-	const pressed = (useControl(control) as { pressed?: boolean }).pressed ?? false
+	const pressed = useControl(control).pressed ?? false
 	const pairing = usePairable(control)
 
 	return {
@@ -162,10 +162,10 @@ function useAngle(control: string, detent: number) {
 	const device = useDevice()
 	const [angle, setAngle] = useState(0)
 
-	useEffect(() => device.on('event', event => {
+	useDeviceEvent('event', event => {
 		if(event.event === control && 'delta' in event)
 			setAngle(current => current + event.delta * detent)
-	}), [device, control, detent])
+	}, device)
 
 	return angle
 }

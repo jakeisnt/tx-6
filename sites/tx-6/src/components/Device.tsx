@@ -1,6 +1,6 @@
 import { cn } from '@ulnd/te-site-kit'
-import type { TX6Input } from '@ulnd/tx-6'
-import { useTX6Attribute } from '@ulnd/use-tx-6'
+import type { TX6, TX6Input } from '@ulnd/teenage'
+import { useControl } from '@ulnd/teenage/react'
 import {
 	at,
 	CHANNEL_BUTTON_Y,
@@ -22,7 +22,7 @@ const TONES = ['dark', 'orange', 'cream'] as const
 
 function Channel({ input, x }: { input: TX6Input, x: number }) {
 	// The dot under each fader lights while its channel button is held
-	const pressed = useTX6Attribute(`input${input}.button`).pressed ?? false
+	const pressed = useControl<TX6>(`input${input}.button`).pressed ?? false
 
 	return (
 		<>

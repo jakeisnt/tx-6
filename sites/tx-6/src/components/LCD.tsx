@@ -1,6 +1,6 @@
 import { cn } from '@ulnd/te-site-kit'
-import type { TX6Event } from '@ulnd/tx-6'
-import { useTX6, useTX6Attributes, useTX6Device } from '@ulnd/use-tx-6'
+import type { TX6, TX6Event } from '@ulnd/teenage'
+import { useConnection, useControls, useDevice } from '@ulnd/teenage/react'
 import { useEffect, useState } from 'react'
 import { at, LCD as POSITION } from '../lib/geometry.ts'
 import classes from './lcd.module.scss'
@@ -72,9 +72,9 @@ function describe(event: TX6Event): { value?: number, channel?: string } {
 
 /** The screen: connection status, last-touched control and output meters. */
 export default function LCD() {
-	const device = useTX6Device()
-	const { status } = useTX6()
-	const sliders = useTX6Attributes(SLIDERS)
+	const device = useDevice<TX6>()
+	const { status } = useConnection<TX6>()
+	const sliders = useControls<TX6>(SLIDERS)
 
 	const [value, setValue] = useState(50)
 	const [channel, setChannel] = useState('1')

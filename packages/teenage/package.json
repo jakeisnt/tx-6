@@ -1,0 +1,73 @@
+{
+  "name": "@ulnd/teenage",
+  "version": "0.1.0",
+  "description": "Every teenage engineering device driver in one package: TX-6, TP-7 and OP-1 field over MIDI, React hooks, and an API for your own devices",
+  "keywords": [
+    "teenage-engineering",
+    "tx-6",
+    "tp-7",
+    "op-1",
+    "op-1-field",
+    "midi",
+    "ble-midi",
+    "web-bluetooth",
+    "web-midi",
+    "react",
+    "hooks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakeisnt/tx-6.git",
+    "directory": "packages/teenage"
+  },
+  "author": "Jake Chvatal <jake@uln.industries>",
+  "contributors": [
+    "William Gibson <william@darn.fish>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/jakeisnt/tx-6#readme",
+  "bugs": "https://github.com/jakeisnt/tx-6/issues",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./web-bluetooth": {
+      "types": "./dist/web-bluetooth.d.ts",
+      "default": "./dist/web-bluetooth.js"
+    },
+    "./web-midi": {
+      "types": "./dist/web-midi.d.ts",
+      "default": "./dist/web-midi.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "bun run build"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  }
+}

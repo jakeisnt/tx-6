@@ -23,25 +23,18 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run check
 
-      - name: Check the tag matches every package version
+      - name: Check the tag matches the package version
         run: |
-          for pkg in packages/*/core packages/*/react; do
-            version=$(node -p "require('./$pkg/package.json').version")
-            if [ "v$version" != "$GITHUB_REF_NAME" ]; then
-              echo "$pkg is $version, but the tag is $GITHUB_REF_NAME"
-              exit 1
-            fi
-          done
+          version=$(node -p "require('./packages/teenage/package.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "@ulnd/teenage is $version, but the tag is $GITHUB_REF_NAME"
+            exit 1
+          fi
 
-      # bun pm pack turns workspace: ranges into real versions; npm publish does not
       - run: bun run pack
 
-      # Each core package before its React package, which peers on it
+      # @ulnd/teenage is the only published package; the rest of the workspace is bundled into it
       - name: Publish
-        run: |
-          for device in tx-6 tp-7 op-1; do
-            npm publish packed/ulnd-$device-*.tgz --access public --provenance
-            npm publish packed/ulnd-use-$device-*.tgz --access public --provenance
-          done
+        run: npm publish packed/ulnd-teenage-*.tgz --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
