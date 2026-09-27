@@ -1,0 +1,68 @@
+// One unit of the drawing, sized so the device fits the viewport
+$w: 420;
+$h: 680;
+
+.body {
+	--s: min(calc((100vw - 48px) / #{$w}), calc((100dvh - 240px) / #{$h}), 1px);
+
+	position: relative;
+	display: flex;
+	width: calc(#{$w} * var(--s));
+	height: calc(#{$h} * var(--s));
+	flex: none;
+	border-radius: calc(48 * var(--s));
+	background:
+		radial-gradient(ellipse 90% 45% at 30% 0%, rgba(255, 255, 255, 0.35), transparent 70%),
+		linear-gradient(180deg, #e2e2e4 0%, #cfcfd1 40%, #b3b2b5 100%);
+	box-shadow:
+		inset 0 calc(3 * var(--s)) calc(2 * var(--s)) rgba(255, 255, 255, 0.85),
+		inset 0 calc(-5 * var(--s)) calc(3 * var(--s)) rgba(0, 0, 0, 0.2),
+		0 calc(2 * var(--s)) calc(3 * var(--s)) rgba(0, 0, 0, 0.18),
+		calc(10 * var(--s)) calc(30 * var(--s)) calc(60 * var(--s)) rgba(0, 0, 0, 0.18);
+}
+
+// The three buttons down the left edge
+.side {
+	position: absolute;
+	left: calc(-22 * var(--s));
+	top: calc(120 * var(--s));
+	display: flex;
+	flex-direction: column;
+	gap: calc(14 * var(--s));
+}
+
+.face {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	padding: calc(36 * var(--s)) calc(32 * var(--s)) calc(44 * var(--s));
+}
+
+.title {
+	margin: 0;
+	align-self: flex-start;
+	font-size: calc(18 * var(--s));
+	font-weight: 400;
+	letter-spacing: 0.08em;
+	color: #3c3b41;
+}
+
+.screen {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	padding: calc(10 * var(--s)) calc(14 * var(--s));
+	border-radius: calc(10 * var(--s));
+	font-family: ui-monospace, "SF Mono", Menlo, monospace;
+	font-size: calc(13 * var(--s));
+	color: #d3e4ec;
+	background: #1d1c22;
+	box-shadow: inset 0 calc(2 * var(--s)) calc(4 * var(--s)) rgba(0, 0, 0, 0.6);
+}
+
+.transport {
+	display: flex;
+	gap: calc(16 * var(--s));
+}

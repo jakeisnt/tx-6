@@ -1,0 +1,19 @@
+{
+  "name": "@ulnd/use-te-device",
+  "version": "0.1.0",
+  "private": true,
+  "description": "React hooks for any teenage engineering device. Not published: @ulnd/teenage/react bundles it.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.tsx",
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@ulnd/te-device": "workspace:*"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@ulnd/op-1",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The teenage engineering OP-1 field synthesizer: its control map and device class. Not published: @ulnd/teenage bundles it.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@ulnd/te-device": "workspace:*"
+  }
+}

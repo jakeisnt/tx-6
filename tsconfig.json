@@ -20,10 +20,14 @@
 		// Resolve the workspace packages to their source, so tests and type checks need no build
 		"paths": {
 			"@ulnd/tx-6": ["./packages/tx-6/src/index.ts"],
-			"@ulnd/tx-6/web-bluetooth": ["./packages/tx-6/src/transports/web-bluetooth.ts"],
-			"@ulnd/tx-6/web-midi": ["./packages/tx-6/src/transports/web-midi.ts"],
-			"@ulnd/use-tx-6": ["./packages/use-tx-6/src/index.tsx"]
+			"@ulnd/tp-7": ["./packages/tp-7/src/index.ts"],
+			"@ulnd/op-1": ["./packages/op-1/src/index.ts"],
+			"@ulnd/te-device": ["./packages/te-device/src/index.ts"],
+			"@ulnd/te-device/*": ["./packages/te-device/src/transports/*.ts"],
+			"@ulnd/use-te-device": ["./packages/use-te-device/src/index.tsx"],
+			"@ulnd/teenage": ["./packages/teenage/src/index.ts"],
+			"@ulnd/teenage/*": ["./packages/teenage/src/*.ts"]
 		}
 	},
-	"include": ["packages/*/src", "packages/*/test"]
+	"include": ["packages/*/src", "packages/*/test", "packages/teenage/tsdown.config.ts"]
 }

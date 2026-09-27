@@ -1,0 +1,16 @@
+{
+  "name": "@ulnd/tp-7",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The teenage engineering TP-7 field recorder: its control map and device class. Not published: @ulnd/teenage bundles it.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@ulnd/te-device": "workspace:*"
+  }
+}

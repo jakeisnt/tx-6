@@ -1,7 +1,6 @@
 import { describe, expect, mock, test } from 'bun:test'
-
+import { fakeTransport } from '../../te-device/test/fakes.ts'
 import { TX6 } from '../src/index.ts'
-import { fakeTransport } from './fakes.ts'
 
 describe('TX6', () => {
 	test('connects, receives and disconnects', async () => {

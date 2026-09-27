@@ -1,13 +1,15 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
-	// Static-assets-only Worker serving the TX-6 browser demo
+	// Static-assets-only Worker serving the TX-6 site (sites/tx-6). It lives at the
+	// repo root because the existing Workers Builds project builds from here.
 	"name": "tx-6",
 	"compatibility_date": "2026-09-26",
+	"routes": [{ "pattern": "tx-6.jake.kitchen", "custom_domain": true }],
 	"build": {
-		"command": "bun run demo:build"
+		"command": "bun run --cwd sites/tx-6 build"
 	},
 	"assets": {
-		"directory": "./demo/dist",
+		"directory": "./sites/tx-6/dist",
 		"not_found_handling": "single-page-application"
 	}
 }
