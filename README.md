@@ -70,7 +70,7 @@ The workflow publishes with npm [trusted publishing](https://docs.npmjs.com/trus
 ## Sites
 Each site draws its device with every control live, shows a raw log of every BLE-MIDI packet and the messages parsed from it, and has a **pair controls** mode: click a control on the drawing, then move it on the device to pair them. Pairings are saved in the browser, per device.
 
-Each site is a static-assets [Cloudflare Worker](https://developers.cloudflare.com/workers/static-assets/), configured in `sites/<device>/wrangler.jsonc` and served on its own custom domain (`<device>.jake.kitchen`).
+Each site is a static-assets [Cloudflare Worker](https://developers.cloudflare.com/workers/static-assets/), served on its own custom domain (`<device>.jake.kitchen`). The TP-7 and OP-1 Workers are configured in `sites/<device>/wrangler.jsonc`. The TX-6 Worker's config stays in the root `wrangler.jsonc`, where its existing Workers Builds project expects it.
 
 ```
 bun run sites:deploy                            # build and deploy all three
@@ -78,7 +78,7 @@ bun run --cwd sites/op-1 deploy                 # or just one
 bun run --cwd sites/op-1 deploy:dry-run         # check the config without deploying
 ```
 
-`wrangler deploy` runs the site's build itself. To connect the repo to Cloudflare Workers Builds, create one Worker per site and set its root directory to `sites/<device>`.
+`wrangler deploy` runs the site's build itself. To connect the TP-7 or OP-1 Worker to Cloudflare Workers Builds, set its root directory to `sites/<device>`.
 
 ## Thanks
 Inspired by [this demo](https://twitter.com/hturan/status/1523702486258782208) by [@hturan@twitter.com](https://twitter.com/hturan).
