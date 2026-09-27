@@ -1,0 +1,14 @@
+{
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	// Static-assets-only Worker serving the TP-7 site
+	"name": "tp-7",
+	"compatibility_date": "2026-09-26",
+	"routes": [{ "pattern": "tp-7.jake.kitchen", "custom_domain": true }],
+	"build": {
+		"command": "bun run build"
+	},
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "single-page-application"
+	}
+}

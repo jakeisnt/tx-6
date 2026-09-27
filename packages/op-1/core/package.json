@@ -1,0 +1,62 @@
+{
+  "name": "@ulnd/op-1",
+  "version": "0.1.0",
+  "description": "Headless driver for the teenage engineering OP-1 field over MIDI: decodes its encoders and buttons in any JavaScript runtime, with Web Bluetooth and Web MIDI transports",
+  "keywords": [
+    "teenage-engineering",
+    "op-1",
+    "op-1-field",
+    "synthesizer",
+    "midi",
+    "ble-midi",
+    "web-bluetooth",
+    "web-midi",
+    "headless"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakeisnt/tx-6.git",
+    "directory": "packages/op-1/core"
+  },
+  "author": "Jake Chvatal <jake@uln.industries>",
+  "contributors": [
+    "William Gibson <william@darn.fish>"
+  ],
+  "license": "MIT",
+  "homepage": "https://op-1.jake.kitchen",
+  "bugs": "https://github.com/jakeisnt/tx-6/issues",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./web-bluetooth": {
+      "types": "./dist/transports/web-bluetooth.d.ts",
+      "default": "./dist/transports/web-bluetooth.js"
+    },
+    "./web-midi": {
+      "types": "./dist/transports/web-midi.d.ts",
+      "default": "./dist/transports/web-midi.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "bun run build"
+  },
+  "devDependencies": {
+    "@ulnd/te-device": "workspace:*"
+  }
+}

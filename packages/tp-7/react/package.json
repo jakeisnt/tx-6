@@ -1,0 +1,57 @@
+{
+  "name": "@ulnd/use-tp-7",
+  "version": "0.1.0",
+  "description": "React hooks for the teenage engineering TP-7, built on @ulnd/tp-7",
+  "keywords": [
+    "teenage-engineering",
+    "tp-7",
+    "field-recorder",
+    "midi",
+    "ble-midi",
+    "react",
+    "hooks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakeisnt/tx-6.git",
+    "directory": "packages/tp-7/react"
+  },
+  "author": "Jake Chvatal <jake@uln.industries>",
+  "contributors": [
+    "William Gibson <william@darn.fish>"
+  ],
+  "license": "MIT",
+  "homepage": "https://tp-7.jake.kitchen",
+  "bugs": "https://github.com/jakeisnt/tx-6/issues",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "bun run build"
+  },
+  "peerDependencies": {
+    "@ulnd/tp-7": "workspace:^",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@ulnd/tp-7": "workspace:*",
+    "@ulnd/use-te-device": "workspace:*"
+  }
+}

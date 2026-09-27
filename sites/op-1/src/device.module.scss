@@ -1,0 +1,127 @@
+// One unit of the drawing, sized so the device fits the viewport
+$w: 1020;
+$h: 470;
+
+@function s($n) {
+	@return calc(#{$n} * var(--s));
+}
+
+.body {
+	--s: min(calc((100vw - 48px) / #{$w}), calc((100dvh - 240px) / #{$h}), 1px);
+
+	display: flex;
+	flex-direction: column;
+	gap: s(18);
+	width: s($w);
+	flex: none;
+	padding: s(28) s(32);
+	border-radius: s(28);
+	background:
+		radial-gradient(ellipse 90% 45% at 30% 0%, rgba(255, 255, 255, 0.35), transparent 70%),
+		linear-gradient(180deg, #e2e2e4 0%, #cfcfd1 45%, #b8b7ba 100%);
+	box-shadow:
+		inset 0 s(3) s(2) rgba(255, 255, 255, 0.85),
+		inset 0 s(-5) s(3) rgba(0, 0, 0, 0.2),
+		0 s(2) s(3) rgba(0, 0, 0, 0.18),
+		s(10) s(30) s(60) rgba(0, 0, 0, 0.18);
+}
+
+.top {
+	display: flex;
+	align-items: center;
+	gap: s(24);
+}
+
+.speaker {
+	width: s(120);
+	height: s(96);
+	border-radius: s(10);
+	background: radial-gradient(circle, #6b6a70 s(2), transparent s(2.5)) 0 0 / s(10) s(10), #cfcfd1;
+	box-shadow: inset 0 s(1) s(2) rgba(0, 0, 0, 0.2);
+}
+
+.screen {
+	flex: 1;
+	height: s(96);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: s(12) s(16);
+	border-radius: s(10);
+	font-family: ui-monospace, "SF Mono", Menlo, monospace;
+	font-size: s(14);
+	color: #d3e4ec;
+	background: #121116;
+	box-shadow: inset 0 s(2) s(4) rgba(0, 0, 0, 0.6);
+}
+
+.brand {
+	color: #6b6a70;
+	letter-spacing: 0.08em;
+}
+
+.encoders {
+	display: flex;
+	gap: s(18);
+}
+
+.keys {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: s(12);
+}
+
+.group {
+	display: flex;
+	gap: s(6);
+}
+
+// ─── Keyboard ────────────────────────────────────────────────────────────────
+
+.keyboard {
+	display: flex;
+	flex-direction: column;
+	gap: s(6);
+}
+
+.blackRow,
+.whiteRow {
+	display: grid;
+	grid-template-columns: repeat(14, 1fr);
+	gap: s(6);
+}
+
+// Black keys sit between the white keys below them
+.blackRow {
+	padding-left: calc((100% - 13 * #{s(6)}) / 28);
+	padding-right: calc((100% - 13 * #{s(6)}) / 28);
+}
+
+.pianoKey {
+	height: s(64);
+	padding: 0;
+	border: none;
+	border-radius: s(8);
+	cursor: pointer;
+	touch-action: none;
+	background: linear-gradient(180deg, #f4f4f5, #dcdcde);
+	box-shadow:
+		inset 0 s(1) 0 rgba(255, 255, 255, 0.8),
+		0 s(1) s(1) rgba(0, 0, 0, 0.3),
+		0 s(3) s(6) rgba(0, 0, 0, 0.15);
+}
+
+.black {
+	background: linear-gradient(180deg, #3a3940, #26252b);
+}
+
+.held {
+	transform: translateY(s(1));
+	background: #fd6219;
+	box-shadow: inset 0 s(2) s(3) rgba(0, 0, 0, 0.3);
+}
+
+.gap {
+	height: s(64);
+}

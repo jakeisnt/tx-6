@@ -1,0 +1,189 @@
+@use "units" as *;
+
+.scene {
+	// One photo pixel, sized so the device fits the viewport with room to breathe
+	--u: min(calc((100vw - 48px) / 1278), calc((100dvh - 240px) / 2000), 0.34px);
+
+	position: relative;
+	width: u(1278);
+	height: u(2000);
+	flex: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-tap-highlight-color: transparent;
+
+	// Soft contact shadow where the device rests on the desk
+	&::before {
+		content: "";
+		position: absolute;
+		left: u(66 + 40);
+		right: u(-10);
+		top: u(1600);
+		height: u(260);
+		border-radius: 50%;
+		background: radial-gradient(ellipse at 50% 40%, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.1) 45%, transparent 70%);
+		filter: blur(u(28));
+		pointer-events: none;
+	}
+}
+
+// Anodised aluminium body: light falls from the top, so the panel darkens toward
+// the bottom; layered inset shadows give the chamfered edge its highlight and rim.
+.body {
+	position: absolute;
+	left: u(66);
+	top: 0;
+	width: u(1212);
+	height: u(1754);
+	border-radius: u(44);
+	z-index: 1;
+
+	background:
+		radial-gradient(ellipse 90% 45% at 30% 0%, rgba(255, 255, 255, 0.3), transparent 70%),
+		linear-gradient(115deg, rgba(255, 255, 255, 0.14) 0%, transparent 35%, transparent 65%, rgba(0, 0, 0, 0.04) 100%),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 30% 70%, rgba(0, 0, 0, 0.06)),
+		linear-gradient(180deg, $panel-top 0%, #d2d2d4 22%, #c0c0c2 48%, #b0afb2 74%, $panel-bottom 100%);
+
+	box-shadow:
+		inset 0 u(3) u(2) rgba(255, 255, 255, 0.85),
+		inset u(3) 0 u(3) rgba(255, 255, 255, 0.45),
+		inset u(-3) 0 u(4) rgba(0, 0, 0, 0.1),
+		inset 0 u(-5) u(3) rgba(0, 0, 0, 0.22),
+		inset 0 u(-14) u(10) u(-6) rgba(0, 0, 0, 0.12),
+		0 0 0 u(1) rgba(0, 0, 0, 0.1),
+		// Layered drop shadow: a tight contact edge fading into a wide, soft penumbra
+		0 u(1) u(1) rgba(0, 0, 0, 0.2),
+		0 u(3) u(4) rgba(0, 0, 0, 0.12),
+		u(4) u(12) u(18) rgba(0, 0, 0, 0.1),
+		u(10) u(30) u(48) rgba(0, 0, 0, 0.12),
+		u(20) u(64) u(110) rgba(0, 0, 0, 0.14);
+
+	// Fine bead-blasted grain over the whole panel
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		opacity: 0.35;
+		mix-blend-mode: soft-light;
+		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	}
+}
+
+.title {
+	position: absolute;
+	left: u(66);
+	top: u(78);
+	margin: 0;
+	font-size: u(86);
+	font-weight: 300;
+	line-height: 1;
+	letter-spacing: u(-1);
+	color: $ink;
+	text-shadow: 0 u(1) 0 rgba(255, 255, 255, 0.6);
+}
+
+.label {
+	@include placed;
+	font-size: u(46);
+	font-weight: 300;
+	line-height: 1;
+	color: $ink;
+	text-shadow: 0 u(1) 0 rgba(255, 255, 255, 0.5);
+	white-space: nowrap;
+}
+
+// Small pits drilled into the panel.
+.dot {
+	@include placed;
+	width: u(10);
+	height: u(10);
+	border-radius: 50%;
+	background: #a6a6a9;
+	box-shadow:
+		inset 0 u(1.5) u(2) rgba(0, 0, 0, 0.45),
+		0 u(1) 0 rgba(255, 255, 255, 0.55);
+	transition: background 80ms ease-out, box-shadow 80ms ease-out;
+}
+
+.dotLit {
+	background: #ff7a3d;
+	box-shadow:
+		inset 0 u(1) u(1) rgba(120, 30, 0, 0.4),
+		0 0 u(10) u(2) rgba(255, 110, 40, 0.55);
+}
+
+// White plastic tab on the left edge.
+.sideTab {
+	position: absolute;
+	left: 0;
+	top: u(1322);
+	width: u(72);
+	height: u(188);
+	border-radius: u(10) 0 0 u(10);
+	background: linear-gradient(90deg, #f6f6f6, #ececec 60%, #dcdcdc);
+	box-shadow:
+		inset u(2) u(2) u(2) rgba(255, 255, 255, 0.9),
+		inset 0 u(-3) u(3) rgba(0, 0, 0, 0.08),
+		0 u(6) u(12) rgba(0, 0, 0, 0.18);
+}
+
+// Jacks peeking out of the bottom edge.
+.jack {
+	@include placed;
+	width: u(66);
+	height: u(34);
+	transform: translate(-50%, 0);
+	border-radius: 0 0 u(8) u(8);
+	background: linear-gradient(90deg, #7d7d80, #b9b9bb 40%, #9b9b9e 70%, #6f6f72);
+	box-shadow: 0 u(3) u(4) rgba(0, 0, 0, 0.3);
+
+	&::after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: u(12);
+		width: u(18);
+		height: u(18);
+		transform: translateX(-50%);
+		border-radius: 50%;
+		background: #2a2a2d;
+		box-shadow: inset 0 u(2) u(3) #000;
+	}
+}
+
+// Knurled volume knob below the body.
+.volume {
+	position: absolute;
+	left: u(66 + 928);
+	top: u(1742);
+	width: u(242);
+	height: u(258);
+}
+
+.volumeCollar {
+	position: absolute;
+	left: u(20);
+	top: 0;
+	width: u(202);
+	height: u(34);
+	background: linear-gradient(90deg, #8a8a8d, #cfcfd1 35%, #b4b4b6 65%, #7c7c7f);
+	box-shadow: inset 0 u(-3) u(4) rgba(0, 0, 0, 0.3);
+}
+
+.volumeGrip {
+	position: absolute;
+	left: 0;
+	top: u(30);
+	width: 100%;
+	height: u(228);
+	border-radius: u(6) u(6) u(18) u(18);
+	background:
+		repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.22) 0 u(2.5), transparent u(2.5) u(7)),
+		repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.22) 0 u(2.5), transparent u(2.5) u(7)),
+		linear-gradient(90deg, #7a7a7d 0%, #a9a9ac 12%, #dcdcde 38%, #c3c3c5 62%, #99999c 85%, #6d6d70 100%);
+	box-shadow:
+		inset 0 u(4) u(6) rgba(0, 0, 0, 0.35),
+		0 u(12) u(24) rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,14 @@
+{
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	// Static-assets-only Worker serving the TX-6 site
+	"name": "tx-6",
+	"compatibility_date": "2026-09-26",
+	"routes": [{ "pattern": "tx-6.jake.kitchen", "custom_domain": true }],
+	"build": {
+		"command": "bun run build"
+	},
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "single-page-application"
+	}
+}

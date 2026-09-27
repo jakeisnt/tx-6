@@ -1,0 +1,13 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		// No DOM, Node or Bun globals: the drivers must not depend on any host environment,
+		// and React is the only host dependency the hooks have
+		"lib": ["es2022"],
+		"types": [],
+		"noEmit": true
+	},
+	// Also the project the published packages' declarations are generated from, so
+	// they can inline the private shared cores
+	"include": ["*/src", "*/*/src"]
+}

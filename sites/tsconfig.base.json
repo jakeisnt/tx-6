@@ -1,0 +1,34 @@
+{
+	"compilerOptions": {
+		"target": "es2022",
+		"lib": ["es2022", "dom", "dom.iterable"],
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"verbatimModuleSyntax": true,
+		"isolatedModules": true,
+		"skipLibCheck": true,
+		"allowImportingTsExtensions": true,
+		"types": ["vite/client", "node"],
+		"noEmit": true,
+		// Mirrors the aliases in te-site-kit/vite.ts
+		"paths": {
+			"@ulnd/te-device": ["../packages/te-device/src/index.ts"],
+			"@ulnd/te-device/*": ["../packages/te-device/src/transports/*.ts"],
+			"@ulnd/use-te-device": ["../packages/use-te-device/src/index.tsx"],
+			"@ulnd/te-site-kit": ["./te-site-kit/src/index.ts"],
+			"@ulnd/te-site-kit/vite": ["./te-site-kit/vite.ts"],
+			"@ulnd/tx-6": ["../packages/tx-6/core/src/index.ts"],
+			"@ulnd/tx-6/*": ["../packages/tx-6/core/src/transports/*.ts"],
+			"@ulnd/use-tx-6": ["../packages/tx-6/react/src/index.ts"],
+			"@ulnd/tp-7": ["../packages/tp-7/core/src/index.ts"],
+			"@ulnd/tp-7/*": ["../packages/tp-7/core/src/transports/*.ts"],
+			"@ulnd/use-tp-7": ["../packages/tp-7/react/src/index.ts"],
+			"@ulnd/op-1": ["../packages/op-1/core/src/index.ts"],
+			"@ulnd/op-1/*": ["../packages/op-1/core/src/transports/*.ts"],
+			"@ulnd/use-op-1": ["../packages/op-1/react/src/index.ts"]
+		}
+	}
+}

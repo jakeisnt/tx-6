@@ -1,0 +1,32 @@
+{
+  "name": "@ulnd/site-op-1",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Browser remote for the teenage engineering OP-1 field synthesizer, built on @ulnd/op-1",
+  "type": "module",
+  "homepage": "https://op-1.jake.kitchen",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "deploy": "wrangler deploy",
+    "deploy:dry-run": "wrangler deploy --dry-run"
+  },
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@ulnd/op-1": "workspace:*",
+    "@ulnd/use-op-1": "workspace:*",
+    "@ulnd/te-site-kit": "workspace:*",
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "sass": "^1.105.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "wrangler": "^4.141.0"
+  }
+}

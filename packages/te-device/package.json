@@ -1,0 +1,15 @@
+{
+  "name": "@ulnd/te-device",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared, platform-agnostic driver core for teenage engineering devices over MIDI. Not published: each device package bundles it.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./web-bluetooth": "./src/transports/web-bluetooth.ts",
+    "./web-midi": "./src/transports/web-midi.ts",
+    "./package.json": "./package.json"
+  }
+}

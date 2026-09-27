@@ -1,0 +1,58 @@
+{
+  "name": "@ulnd/use-op-1",
+  "version": "0.1.0",
+  "description": "React hooks for the teenage engineering OP-1 field, built on @ulnd/op-1",
+  "keywords": [
+    "teenage-engineering",
+    "op-1",
+    "op-1-field",
+    "synthesizer",
+    "midi",
+    "ble-midi",
+    "react",
+    "hooks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakeisnt/tx-6.git",
+    "directory": "packages/op-1/react"
+  },
+  "author": "Jake Chvatal <jake@uln.industries>",
+  "contributors": [
+    "William Gibson <william@darn.fish>"
+  ],
+  "license": "MIT",
+  "homepage": "https://op-1.jake.kitchen",
+  "bugs": "https://github.com/jakeisnt/tx-6/issues",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "bun run build"
+  },
+  "peerDependencies": {
+    "@ulnd/op-1": "workspace:^",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@ulnd/op-1": "workspace:*",
+    "@ulnd/use-te-device": "workspace:*"
+  }
+}
